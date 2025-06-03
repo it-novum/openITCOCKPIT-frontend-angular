@@ -313,6 +313,8 @@ export class UsersLdapComponent implements OnInit, OnDestroy {
                 this.post.firstname = result.givenname;
                 this.post.lastname = result.sn;
                 this.post.email = result.email;
+                this.post.company = result.company;
+                this.post.department = result.department;
 
                 this.ldapUserDetails = result;
 

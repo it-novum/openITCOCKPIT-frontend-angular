@@ -293,6 +293,20 @@
                 </div>
 
                 <div class="mb-3">
+                    <label cLabel for="post.department">
+                        {{ t('Department') }}
+                    </label>
+                    <input cFormControl
+                           required
+                           id="post.department"
+                           type="text"
+                           name="post.department"
+                           [(ngModel)]="post.department"
+                           oitcFormError [errors]="errors" errorField="department"/>
+                    <oitc-form-feedback [errors]="errors" errorField="department"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
                     <label cLabel for="post.position">
                         {{ t('Company position') }}
                     </label>

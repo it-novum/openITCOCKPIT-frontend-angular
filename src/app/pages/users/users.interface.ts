@@ -201,6 +201,7 @@ export interface UserPost {
     paginatorlength: number
     dashboard_tab_rotation: number
     company?: string | null
+    department?: string | null
     position?: string | null
     recursive_browser: 0 | 1
     dateformat: string
@@ -292,6 +293,8 @@ export interface UsersLdapUserDetails {
     sn: string
     samaccountname: string
     email: string
+    company: string
+    department: string
     dn: string
     memberof: string[]
     display_name: string

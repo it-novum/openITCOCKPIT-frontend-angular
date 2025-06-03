@@ -487,8 +487,30 @@
                            type="text"
                            name="post.company"
                            [(ngModel)]="post.company"
+                           disabled
                            oitcFormError [errors]="errors" errorField="company"/>
                     <oitc-form-feedback [errors]="errors" errorField="company"></oitc-form-feedback>
+                    <div class="help-block text-info">
+                        {{ t('Value imported from LDAP Server') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="post.department">
+                        {{ t('Department') }}
+                    </label>
+                    <input cFormControl
+                           required
+                           id="post.department"
+                           type="text"
+                           name="post.department"
+                           [(ngModel)]="post.department"
+                           disabled
+                           oitcFormError [errors]="errors" errorField="department"/>
+                    <oitc-form-feedback [errors]="errors" errorField="department"></oitc-form-feedback>
+                    <div class="help-block text-info">
+                        {{ t('Value imported from LDAP Server') }}
+                    </div>
                 </div>
 
                 <div class="mb-3">
