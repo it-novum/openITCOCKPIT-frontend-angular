@@ -20,7 +20,12 @@ import { ContextActionType, LabelPosition, MapItemType } from '../map-item-base/
 import { MapItemReloadService } from '../../../../services/map-item-reload.service';
 import { BlinkService } from '../../../../services/blink.service';
 import { UUID } from '../../../../classes/UUID';
-import { DataForMapItem, MapItemRoot, MapItemRootParams } from '../map-item-base/map-item-base.interface';
+import {
+    DataForMapItem,
+    MapItemRoot,
+    MapItemRootForMapItem,
+    MapItemRootParams
+} from '../map-item-base/map-item-base.interface';
 
 @Component({
     selector: 'oitc-map-item',
@@ -79,22 +84,22 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
         }
     }
 
-    public updateCallback(result: MapItemRoot) {
-        if (!result.allowView) {
+    public updateCallback = (result: MapItemRootForMapItem) => {
+        if (!result.data.allowView) {
             this.allowView = false;
             return;
         }
 
-        this.icon = result.data.icon!;
-        this.icon_property = result.data.icon_property!;
-        this.allowView = result.allowView;
+        this.icon = result.data.data.icon!;
+        this.icon_property = result.data.data.icon_property!;
+        this.allowView = result.data.allowView;
         this.init = false;
 
-        this.getLabel(result.data);
+        this.getLabel(result.data.data);
 
         this.currentIcon = this.icon;
 
-        if ((result.data.isAcknowledged === true || result.data.isInDowntime === true) && this.uuidForServices) {
+        if ((result.data.data.isAcknowledged === true || result.data.data.isInDowntime === true) && this.uuidForServices) {
             this.BlinkService.registerNewObject(this.uuidForServices, this.blinkServiceCallback);
         } else {
             if (this.uuidForServices) {
@@ -119,11 +124,11 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
 
         this.subscriptions.add(this.MapItemBaseService.getMapItem(params)
             .subscribe((result: MapItemRoot) => {
-                this.updateCallback(result);
+                this.updateCallback({data: result});
             }));
     };
 
-    private getLabel(data: DataForMapItem) {
+    private getLabel = (data: DataForMapItem) => {
         this.label = '';
         switch (this.item()!.type) {
             case 'host':

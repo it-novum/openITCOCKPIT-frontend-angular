@@ -35,7 +35,7 @@ interface CallbackObject {
 export class BlinkService implements OnDestroy {
 
     private objects: CallbackObject = {};
-    private interval: number | null = null;
+    private interval: any | null = null;
     private period = 5000;
 
     constructor() {
@@ -46,6 +46,9 @@ export class BlinkService implements OnDestroy {
         if (!this.objects.hasOwnProperty(uuid)) {
             this.objects[uuid] = callback;
         }
+        if (!this.interval) {
+            this.startInterval();
+        }
     }
 
     public unregisterObject(uuid: string) {
@@ -53,12 +56,12 @@ export class BlinkService implements OnDestroy {
             delete this.objects[uuid];
         }
         if (Object.keys(this.objects).length === 0 && this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
+            this.clearInterval();
         }
     }
 
     private startInterval() {
+        this.clearInterval();
         this.interval = setInterval(() => {
             for (let uuid in this.objects) {
                 //Call callback function
@@ -68,6 +71,10 @@ export class BlinkService implements OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.clearInterval();
+    }
+
+    private clearInterval() {
         if (this.interval) {
             clearInterval(this.interval);
             this.interval = null;

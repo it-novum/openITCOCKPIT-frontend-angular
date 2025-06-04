@@ -27,11 +27,11 @@ import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Subscription, take } from 'rxjs';
 import { MapeditorsService } from '../modules/map_module/pages/mapeditors/mapeditors.service';
 import { Mapitem } from '../modules/map_module/pages/mapeditors/mapeditors.interface';
-import { MapItemRoot } from '../modules/map_module/components/map-item-base/map-item-base.interface';
+import { MapItemRootForMapItem } from '../modules/map_module/components/map-item-base/map-item-base.interface';
 
 interface Item {
     item: Mapitem;
-    callback: (result: MapItemRoot) => void;
+    callback: (result: MapItemRootForMapItem) => void;
 }
 
 @Injectable({
@@ -43,7 +43,7 @@ export class MapItemReloadService implements OnDestroy {
     private MapeditorsService: MapeditorsService = inject(MapeditorsService);
 
     private items: { [key: string]: Item } = {};
-    private interval: number | null = null;
+    private interval: any | null = null;
 
     private refreshInterval = 0;
 
@@ -97,7 +97,7 @@ export class MapItemReloadService implements OnDestroy {
         }
     };
 
-    public registerNewItem(uuid: string, item: Mapitem, callback: (result: MapItemRoot) => void) {
+    public registerNewItem(uuid: string, item: Mapitem, callback: (result: MapItemRootForMapItem) => void) {
         if (!this.items.hasOwnProperty(uuid)) {
             this.items[uuid] = {
                 item: item,

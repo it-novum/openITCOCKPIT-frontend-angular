@@ -61,6 +61,15 @@ export interface MapItemRoot {
     _csrfToken?: string
 }
 
+export interface MapItemRootForMapItem {
+    data: {
+        type?: string
+        allowView?: boolean
+        data: DataForMapItem
+        _csrfToken?: string
+    }
+}
+
 export interface DataForMapItem {
     BitMaskHostState?: number
     BitMaskServiceState?: number
