@@ -37,11 +37,11 @@
                 <c-col md="3">
                     <c-card class="mb-2">
                         <c-card-header>
-                            <h6 cCardTitle>{{t('Interface and PDFs') }}</h6>
+                            <h6 cCardTitle>{{ t('Interface and PDFs') }}</h6>
                         </c-card-header>
                         <c-card-body>
                             <img [src]="logoPdfForHtml" class="card-img-top" alt="">
-                            <hr />
+                            <hr/>
                             <div class="form-group">
                                 <c-button-group>
                                     <button cButton color="primary" class="ripple"
@@ -56,7 +56,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                        class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
+                                            class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 2600x800') }}</div>
                                 </div>
@@ -67,12 +67,12 @@
                 <c-col md="3">
                     <c-card class="mb-2">
                         <c-card-header>
-                            <h6 cCardTitle>{{t('Notifications') }}</h6>
+                            <h6 cCardTitle>{{ t('Notifications') }}</h6>
                         </c-card-header>
                         <c-card-body>
                             <img [src]="smallLogoPdfForHtml" class="card-img-top img-fluid img-center"
                                  style="max-width: 250px;">
-                            <hr />
+                            <hr/>
                             <div class="form-group">
                                 <c-button-group>
                                     <button cButton color="primary" class="ripple"
@@ -87,7 +87,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                        class="helptext">{{ t('The small logo is used by notifications.') }}
+                                            class="helptext">{{ t('The small logo is used by notifications.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 250x77') }}</div>
                                 </div>
@@ -98,11 +98,11 @@
                 <c-col md="3">
                     <c-card class="mb-2">
                         <c-card-header>
-                            <h6 cCardTitle>{{t('Interface and Login') }}</h6>
+                            <h6 cCardTitle>{{ t('Interface and Login') }}</h6>
                         </c-card-header>
                         <c-card-body>
                             <img [src]="logoForHtml" class="card-img-top img-fluid img-center">
-                            <hr />
+                            <hr/>
                             <div class="form-group">
                                 <c-button-group>
                                     <button cButton color="primary" class="ripple"
@@ -117,7 +117,7 @@
                                 </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                        class="helptext">{{ t('The logo is used by the interface and login screen.') }}
+                                            class="helptext">{{ t('The logo is used by the interface and login screen.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 1920x1080') }}</div>
                                 </div>
@@ -128,12 +128,12 @@
                 <c-col md="3">
                     <c-card class="mb-2">
                         <c-card-header>
-                            <h6 cCardTitle>{{t('Header logo') }}</h6>
+                            <h6 cCardTitle>{{ t('Header logo') }}</h6>
                         </c-card-header>
                         <c-card-body>
                             <img [src]="headerLogoForHtml" class="card-img-top img-fluid img-center"
                                  style="max-width: 32px;">
-                            <hr />
+                            <hr/>
                             <div class="form-group">
                                 <c-button-group>
                                     <button cButton color="primary" class="ripple"
@@ -158,32 +158,77 @@
 
             <hr>
 
-            <!-- custom login background  -->
             <c-row>
-                <c-col md="12">
-                    <h4>{{ t('Login background image') }}</h4>
-                    <button cButton color="primary" class="ripple mb-3"
-                            (click)="triggerUploadLogoModal(4)">
-                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                        {{ t('Upload login background') }}
-                    </button>
-                </c-col>
-            </c-row>
-            <c-row>
-                <c-col md="12">
-                    <c-card>
-                        <img [src]="customLoginBackgroundHtml" class="card-img-top img-fluid img-center" alt="">
-                        <c-card-body class="card-body">
+                <!-- custom login background  -->
+                <c-col md="6">
+                    <c-card class="mb-2">
+                        <c-card-header>
+                            <h6 cCardTitle>{{ t('Login background image') }}</h6>
+                        </c-card-header>
+                        <c-card-body>
+                            <img [src]="customLoginBackgroundHtml" class="card-img-top img-fluid img-center" alt="">
+                            <hr/>
+
                             <div class="form-group">
-                                <button cButton color="danger" class="ripple" (click)="resetLogo(4)">
-                                    <fa-icon [icon]="['fas', 'trash']">&nbsp;</fa-icon>
-                                    {{ t('Reset background') }}
-                                </button>
+                                <c-button-group>
+                                    <button cButton color="primary" class="ripple"
+                                            (click)="triggerUploadLogoModal(4)">
+                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                        {{ t('Upload') }}
+                                    </button>
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(4)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Reset photo') }}
+                                    </button>
+                                </c-button-group>
                                 <div class="pt-2">
                                     <div
-                                        class="helptext">{{ t('The image is used as background image for the login screen.') }}
+                                            class="helptext">{{ t('The image is used as background image for the login screen.') }}
                                     </div>
                                     <div class="helptext">{{ t('Resolution: 2560x1440') }}</div>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+
+                <!-- custom status page header  -->
+                <c-col md="6">
+
+                    <c-card class="mb-2">
+                        <c-card-header>
+                            <h6 cCardTitle>{{ t('Status Page Header') }}</h6>
+                        </c-card-header>
+                        <c-card-body>
+                            <img *ngIf="isCustomStatusPageHeader" [src]="customStatusPageHeaderHtml"
+                                 class="card-img-top" alt="">
+                            <ng-container *ngIf="! isCustomStatusPageHeader">
+                                <div class="text-center">
+                                    <fa-icon [icon]="['fas', 'info-circle']" size="3x"
+                                             class="text-info"></fa-icon>
+                                    <p class="text-muted">
+                                        {{ t('No custom status page header image uploaded. Public status pages will not show an image.') }}
+                                    </p>
+                                </div>
+                            </ng-container>
+                            <hr/>
+                            <div class="form-group">
+                                <c-button-group>
+                                    <button cButton color="primary" class="ripple"
+                                            (click)="triggerUploadLogoModal(5)">
+                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                        {{ t('Upload') }}
+                                    </button>
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(5)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Reset photo') }}
+                                    </button>
+                                </c-button-group>
+                                <div class="pt-2">
+                                    <div
+                                            class="helptext">{{ t('This image is used on the public status pages.') }}
+                                    </div>
+                                    <div class="helptext">{{ t('Resolution: 1337x420') }}</div>
                                 </div>
                             </div>
                         </c-card-body>
@@ -212,14 +257,14 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                            name="logoType"
-                            id="logoType"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="logoType"
-                            [options]="logTypeOptions"
-                            (onChange)="onLogoTypeChange()"
-                            [appendTo]="''">
+                                name="logoType"
+                                id="logoType"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="logoType"
+                                [options]="logTypeOptions"
+                                (onChange)="onLogoTypeChange()"
+                                [appendTo]="''">
                         </oitc-select>
                     </div>
                 </c-col>

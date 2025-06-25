@@ -22,7 +22,10 @@
         <c-card class="mb-3">
             <c-card-header>
                 <h5 cCardTitle>
-                    {{ t('Create new Status page') }}
+                    {{ t('Edit status page') }}
+                    <small class="fw-300">
+                        {{ post.name }}
+                    </small>
                 </h5>
                 <c-nav class="card-toolbar card-header-pills">
                     <c-nav-item class="px-1">
@@ -105,7 +108,7 @@
                     </div>
                 </div>
 
-                <!--<div class="my-2" *ngIf="post.public">
+                <div class="my-2" *ngIf="post.public">
                     <label cLabel for="publicTitle">
                         {{ t('Public title') }}
 
@@ -115,7 +118,7 @@
                            oitcFormError [errors]="errors" errorField="public_title"
                            [(ngModel)]="post.public_title">
                     <oitc-form-feedback [errors]="errors" errorField="public_title"></oitc-form-feedback>
-                </div>-->
+                </div>
 
                 <fieldset class="pb-1 pt-2">
                     <legend class="fs-md fieldset-legend-border-bottom" [class]="{'fieldset-legend-border-bottom-danger': noItemsSelected}">

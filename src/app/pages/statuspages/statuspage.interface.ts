@@ -78,7 +78,7 @@ export interface StatuspagePostEdit {
     container_id: null | number,
     name: '',
     description: '',
-   // public_title: ''
+    public_title: ''
     public: boolean,
     show_downtimes: boolean,
     show_downtime_comments: boolean,
