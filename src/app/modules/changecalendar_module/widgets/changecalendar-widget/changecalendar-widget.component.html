@@ -18,7 +18,7 @@
                     <div *ngIf="!widgetConfig" class="text-info">
                         {{ t('No element selected') }}
                     </div>
-                    @if (PermissionsService.hasPermissionObservable(['changecalendarmodule', 'changecalendars', 'edit'])|async) {
+                    @if (PermissionsService.hasPermissionObservable(['changecalendarmodule', 'changecalendars', 'widget'])|async) {
                         <div *ngIf="widgetConfig">
                             <c-row class="h-75">
                                 <c-col [xs]="12" [md]="12" [lg]="12">
