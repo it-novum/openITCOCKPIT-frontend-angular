@@ -6,9 +6,9 @@ import {
     ElementRef,
     inject,
     OnDestroy,
-    OnInit, Signal,
+    OnInit,
+    Signal,
     viewChild,
-    ViewChild,
 } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 import {
@@ -84,8 +84,6 @@ import { AsyncPipe, NgFor, NgIf, NgStyle } from '@angular/common';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         NgxResizeObserverModule,
-        NgIf,
-        NgFor,
         AlertComponent,
         NgStyle,
         AsyncPipe
@@ -107,6 +105,7 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
     private readonly OpenstreetmapToasterService = inject(OpenstreetmapToasterService);
     private subscriptions: Subscription = new Subscription();
     public hideFilter: boolean = true;
+    public hideMap: boolean = false;
     public stateFilter: number = 0;
     private includedLocations: number[] = [];
     public lmap: Signal<ElementRef<any>| undefined> = viewChild<ElementRef>("map");
@@ -221,9 +220,15 @@ export class OpenstreetmapIndexComponent implements OnInit, OnDestroy, AfterView
         this.subscriptions.add(
             this.OpenstreetmapService.getIndex(this.indexParams).subscribe((mapData) => {
                 this.mapData = mapData;
-                this.initLocations = true
-                this.buildLayers();
+                this.initLocations = true;
+                if(this.mapData.locations.length === 0  && this.mapData.locationPoints.length === 0){
+                    this.hideMap = true;
+                } else {
+                    this.hideMap = false;
+                }
                 this.cdr.markForCheck();
+                this.buildLayers();
+
                 if (this.intervalId === null && this.intervalSecs >= 15) {
                     this.intervalId = setInterval(() => {
                         this.loadMapData();

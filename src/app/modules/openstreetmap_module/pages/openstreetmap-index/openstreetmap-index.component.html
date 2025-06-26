@@ -175,26 +175,33 @@
                             </fieldset>
                         </c-col>
                     </c-row>
-                    <c-row class="mt-2"
-                           *ngIf="mapData && mapData.emptyLocations.length > 0 && settingsFilter.hide_empty_locations">
+                    @if(mapData && mapData.emptyLocations.length > 0 && settingsFilter.hide_empty_locations) {
+                    <c-row class="mt-2">
                         <c-col [lg]="2">
                             <fa-icon [icon]="['fas', 'building']"></fa-icon>
                             {{ t('Empty Locations') }}
                         </c-col>
                         <c-col>
-                            <span *ngFor="let location of mapData.emptyLocations; let isLast=last">
+                            @for( location of mapData.emptyLocations; track location.id; let isLast = $last) {
+                            <span>
                                 @if (this.PermissionsService.hasPermissionObservable(['locations', 'edit'])) {
                                     <a [routerLink]="['/', 'locations', 'edit', location.id]">
                                         {{ location.container.name }}
                                     </a>
-                                    <span *ngIf="!isLast">, &nbsp;</span>
+                                    @if(!isLast) {
+                                    <span>, </span>
+                                    }
                                 } @else {
                                     {{ location.container.name }}
-                                    <span *ngIf="!isLast">, &nbsp;</span>
+                                    @if(!isLast) {
+                                    <span>, </span>
+                                    }
                                 }
                             </span>
+                            }
                         </c-col>
                     </c-row>
+                    }
                     <c-row class="mt-2">
                         <c-col class="text-end">
                             <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
@@ -205,7 +212,7 @@
                 </form>
             </c-container>
             <!-- End Filter -->
-            <div *ngIf="initSettings && initLocations && !server_url">
+            @if(initSettings && !server_url) {
                 <div class="text-danger no-padding pb-2 fs-5">
                     <fa-icon class="danger" [icon]="['fas', 'exclamation-triangle']"></fa-icon>
                     {{ t('Missing configuration or location settings') }}
@@ -213,16 +220,19 @@
                 <c-alert color="danger">
                     @if (PermissionsService.hasPermissionObservable(['OpenstreetmapModule', 'openstreetmapsettings', 'index'])|async) {
                         <a [routerLink]="['/', 'openstreetmap_module', 'openstreetmap_settings', 'index']">
-                            <span class="text-white">
-                                <fa-icon class="danger" [icon]="['fas', 'cogs']"></fa-icon>
+                            <span>
+                                <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
                                 {{ t('Configuration / OpenStreetMap Settings') }}
                             </span>
                         </a>
                     } @else {
                         <span class="text-white">{{ t('No OpenStreetMap Settings defined') }}</span>
                     }
+                    {{t('Save  - or edit - the default settings')}}
                 </c-alert>
-                <c-alert color="info" *ngIf="initLocations && mapData.locations.length === 0">
+            }
+            @if(hideMap) {
+                <c-alert color="info" >
                     @if (PermissionsService.hasPermissionObservable(['locations', 'index'])|async) {
                         <a [routerLink]="['/', 'locations', 'index']">
                             <span>
@@ -235,9 +245,11 @@
                     }
                     {{ t('No locations with longitude and latitude parameter defined') }}
                 </c-alert>
-            </div>
+            }
 
-            <div #map id="map" class="d-flex" [ngStyle]="{'height': hideFilter ? '80vh' : '60vh'}"></div>
+
+            <c-container [hidden]="hideMap" [fluid]="true">
+            <div #map id="map" class="d-flex" [ngStyle]="{'height': hideFilter ? '78vh' : '55vh'}"></div>
 
             <div id="legend">
                 <div id="legend-inner">
@@ -263,6 +275,7 @@
                     </div>
                 </div>
             </div>
+            </c-container>
 
         </c-card-body>
     </c-card>
