@@ -1,0 +1,27 @@
+<ng-container *transloco="let t">
+    <c-input-group class="mb-3  ml-1">
+        @if (value === '') {
+            <button cButton (click)="open()" color="default">
+                <fa-icon [icon]="['fas', 'edit']"/>
+            </button>
+        } @else {
+            <button cInputGroupText (click)="clear()">
+                <fa-icon [icon]="['fas', 'trash']" color="danger"/>
+            </button>
+            <p-color-picker
+                    cInputGroupText
+                    id="post.leftBackground"
+                    color="default"
+                    name="post.leftBackground"
+                    [(ngModel)]="value"/>
+        }
+        <label cInputGroupText for="ldap_dn"
+               style="flex: 1 1 0; min-width: 0;"
+
+               class="cursor-question ml-1"
+               (mouseover)="highlightElement($event)"
+               (mouseout)="highlightElement($event)">
+            {{ t(title) }}
+        </label>
+    </c-input-group>
+</ng-container>

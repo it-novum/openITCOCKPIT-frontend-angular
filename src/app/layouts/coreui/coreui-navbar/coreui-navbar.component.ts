@@ -19,9 +19,7 @@ import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
 import { SidebarAction } from './sidebar.interface';
-
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-
 import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
 import { SystemnameService } from '../../../services/systemname.service';
 import { TranslocoService } from '@jsverse/transloco';
@@ -62,7 +60,6 @@ export class CoreuiNavbarComponent implements OnInit, OnDestroy {
     @Input({transform: booleanAttribute}) compact?: boolean;
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
-
     private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined
 
     public visible: boolean = true; // show or hide the complete menu

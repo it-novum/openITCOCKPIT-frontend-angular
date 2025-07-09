@@ -33,165 +33,308 @@
             </h5>
         </c-card-header>
         <c-card-body>
-            <c-row>
-                <c-col md="3">
-                    <c-card class="mb-2">
-                        <c-card-header>
-                            <h6 cCardTitle>{{t('Interface and PDFs') }}</h6>
-                        </c-card-header>
-                        <c-card-body>
-                            <img [src]="logoPdfForHtml" class="card-img-top" alt="">
-                            <hr />
-                            <div class="form-group">
-                                <c-button-group>
-                                    <button cButton color="primary" class="ripple"
-                                            (click)="triggerUploadLogoModal(0)">
-                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                                        {{ t('Upload') }}
-                                    </button>
-                                    <button cButton color="danger" class="ripple" (click)="resetLogo(0)">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Reset logo') }}
-                                    </button>
-                                </c-button-group>
-                                <div class="pt-2">
-                                    <div
-                                        class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
-                                    </div>
-                                    <div class="helptext">{{ t('Resolution: 2600x800') }}</div>
-                                </div>
-                            </div>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-                <c-col md="3">
-                    <c-card class="mb-2">
-                        <c-card-header>
-                            <h6 cCardTitle>{{t('Notifications') }}</h6>
-                        </c-card-header>
-                        <c-card-body>
-                            <img [src]="smallLogoPdfForHtml" class="card-img-top img-fluid img-center"
-                                 style="max-width: 250px;">
-                            <hr />
-                            <div class="form-group">
-                                <c-button-group>
-                                    <button cButton color="primary" class="ripple"
-                                            (click)="triggerUploadLogoModal(1)">
-                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                                        {{ t('Upload') }}
-                                    </button>
-                                    <button cButton color="danger" class="ripple" (click)="resetLogo(1)">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Reset logo') }}
-                                    </button>
-                                </c-button-group>
-                                <div class="pt-2">
-                                    <div
-                                        class="helptext">{{ t('The small logo is used by notifications.') }}
-                                    </div>
-                                    <div class="helptext">{{ t('Resolution: 250x77') }}</div>
-                                </div>
-                            </div>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-                <c-col md="3">
-                    <c-card class="mb-2">
-                        <c-card-header>
-                            <h6 cCardTitle>{{t('Interface and Login') }}</h6>
-                        </c-card-header>
-                        <c-card-body>
-                            <img [src]="logoForHtml" class="card-img-top img-fluid img-center">
-                            <hr />
-                            <div class="form-group">
-                                <c-button-group>
-                                    <button cButton color="primary" class="ripple"
-                                            (click)="triggerUploadLogoModal(2)">
-                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                                        {{ t('Upload') }}
-                                    </button>
-                                    <button cButton color="danger" class="ripple" (click)="resetLogo(2)">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Reset logo') }}
-                                    </button>
-                                </c-button-group>
-                                <div class="pt-2">
-                                    <div
-                                        class="helptext">{{ t('The logo is used by the interface and login screen.') }}
-                                    </div>
-                                    <div class="helptext">{{ t('Resolution: 1920x1080') }}</div>
-                                </div>
-                            </div>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-                <c-col md="3">
-                    <c-card class="mb-2">
-                        <c-card-header>
-                            <h6 cCardTitle>{{t('Header logo') }}</h6>
-                        </c-card-header>
-                        <c-card-body>
-                            <img [src]="headerLogoForHtml" class="card-img-top img-fluid img-center"
-                                 style="max-width: 32px;">
-                            <hr />
-                            <div class="form-group">
-                                <c-button-group>
-                                    <button cButton color="primary" class="ripple"
-                                            (click)="triggerUploadLogoModal(3)">
-                                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                                        {{ t('Upload') }}
-                                    </button>
-                                    <button cButton color="danger" class="ripple" (click)="resetLogo(3)">
-                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                        {{ t('Reset logo') }}
-                                    </button>
-                                </c-button-group>
-                                <div class="pt-2">
-                                    <div class="helptext">{{ t('This Logo is used in the page header') }}</div>
-                                    <div class="helptext">{{ t('Resolution: 32x32px') }}</div>
-                                </div>
-                            </div>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-            </c-row>
 
-            <hr>
+            @if (post) {
+                <c-row>
+                    <c-col md="12">
+                        <c-card class="mb-2">
+                            <c-card-header>
+                                <h6 cCardTitle>{{ t('Colors') }}</h6>
+                            </c-card-header>
+                            <c-card-body>
+                                <div class="mb-3">
+                                    <label cLabel for="post.mode">
+                                        {{ t('Color Mode') }}
+                                    </label>
 
-            <!-- custom login background  -->
-            <c-row>
-                <c-col md="12">
-                    <h4>{{ t('Login background image') }}</h4>
-                    <button cButton color="primary" class="ripple mb-3"
-                            (click)="triggerUploadLogoModal(4)">
-                        <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
-                        {{ t('Upload login background') }}
-                    </button>
-                </c-col>
-            </c-row>
-            <c-row>
-                <c-col md="12">
-                    <c-card>
-                        <img [src]="customLoginBackgroundHtml" class="card-img-top img-fluid img-center" alt="">
-                        <c-card-body class="card-body">
-                            <div class="form-group">
-                                <button cButton color="danger" class="ripple" (click)="resetLogo(4)">
-                                    <fa-icon [icon]="['fas', 'trash']">&nbsp;</fa-icon>
-                                    {{ t('Reset background') }}
+                                    <c-input-group>
+                                        <c-dropdown variant="btn-group">
+                                            <button *ngIf="post.mode === 'light'"
+                                                    cButton cDropdownToggle color="primary">
+                                                <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                {{ t('Light') }}
+                                            </button>
+                                            <button *ngIf="post.mode === 'dark'"
+                                                    cButton cDropdownToggle color="primary">
+                                                <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                {{ t('Dark') }}
+                                            </button>
+                                            <button *ngIf="post.mode === 'auto'"
+                                                    cButton cDropdownToggle color="primary">
+                                                <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                {{ t('Auto') }}
+                                            </button>
+                                            <ul cDropdownMenu>
+                                                <li cDropdownItem (click)="setMode('light')">
+                                                    <svg cIcon class="me-2" name="cilSun" size="lg"></svg>
+                                                    {{ t('Light') }}
+                                                </li>
+                                                <li cDropdownItem (click)="setMode('dark')">
+                                                    <svg cIcon class="me-2" name="cilMoon" size="lg"></svg>
+                                                    {{ t('Dark') }}
+                                                </li>
+                                                <li cDropdownItem (click)="setMode('auto')">
+                                                    <svg cIcon class="me-2" name="cilContrast" size="lg"></svg>
+                                                    {{ t('Auto') }}
+                                                </li>
+                                            </ul>
+                                        </c-dropdown>
+                                    </c-input-group>
+                                </div>
+
+                                <div class="mb-3">
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                name="post.logoInHeader"
+                                                id="post.logoInHeader"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [trueValue]="1"
+                                                [falseValue]="0"
+                                                [(ngModel)]="post.logoInHeader"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               for="post.logoInHeader">
+                                            {{ t('Logo in header') }}
+                                        </label>
+                                    </c-form-check>
+                                </div>
+
+                                <c-row>
+                                    <c-col class="mb-3" md="3"
+                                           *ngFor="let manipulation of manipulations | keyvalue: keepOrder">
+                                        <h5>{{ manipulation.key | transloco }}</h5>
+                                        <div class="mb-3 pr-1" *ngFor="let manipulator of manipulation.value">
+                                            <oitc-colour-locator-picker
+                                                    [selector]="manipulator.selector"
+                                                    [attribute]="manipulator.attribute"
+                                                    [value]="getManipulatorValue(manipulator.name)"
+                                                    (valueChange)="setManipulatorValue(manipulator.name, $event)"
+                                                    [title]="manipulator.title | transloco"/>
+                                        </div>
+                                    </c-col>
+                                </c-row>
+                            </c-card-body>
+                            <c-card-footer class="text-end">
+                                <button cButton color="danger" type="submit" class="ripple mr-5"
+                                        (click)="resetColors()">
+                                    {{ t('Reset to default') }}
                                 </button>
-                                <div class="pt-2">
-                                    <div
-                                        class="helptext">{{ t('The image is used as background image for the login screen.') }}
+                                <button cButton color="primary" class="ripple" (click)="saveDesign()">
+                                    {{ t('Update style') }}
+                                </button>
+
+                            </c-card-footer>
+                        </c-card>
+                    </c-col>
+                </c-row>
+
+                <hr/>
+
+                <c-row>
+                    <c-col md="3">
+                        <c-card class="mb-2">
+                            <c-card-header>
+                                <h6 cCardTitle>{{ t('Interface and PDFs') }}</h6>
+                            </c-card-header>
+                            <c-card-body>
+                                <img [src]="logoPdfForHtml" class="card-img-top" alt="">
+                                <hr/>
+                                <div class="form-group">
+                                    <c-button-group>
+                                        <button cButton color="primary" class="ripple"
+                                                (click)="triggerUploadLogoModal(0)">
+                                            <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                            {{ t('Upload') }}
+                                        </button>
+                                        <button cButton color="danger" class="ripple" (click)="resetLogo(0)">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Reset logo') }}
+                                        </button>
+                                    </c-button-group>
+                                    <div class="pt-2">
+                                        <div
+                                                class="helptext">{{ t('The logo is used by the interface and PDF files.') }}
+                                        </div>
+                                        <div class="helptext">{{ t('Resolution: 2600x800') }}</div>
                                     </div>
-                                    <div class="helptext">{{ t('Resolution: 2560x1440') }}</div>
                                 </div>
-                            </div>
-                        </c-card-body>
-                    </c-card>
-                </c-col>
-            </c-row>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <c-col md="3">
+                        <c-card class="mb-2">
+                            <c-card-header>
+                                <h6 cCardTitle>{{ t('Notifications') }}</h6>
+                            </c-card-header>
+                            <c-card-body>
+                                <img [src]="smallLogoPdfForHtml" class="card-img-top img-fluid img-center"
+                                     style="max-width: 250px;">
+                                <hr/>
+                                <div class="form-group">
+                                    <c-button-group>
+                                        <button cButton color="primary" class="ripple"
+                                                (click)="triggerUploadLogoModal(1)">
+                                            <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                            {{ t('Upload') }}
+                                        </button>
+                                        <button cButton color="danger" class="ripple" (click)="resetLogo(1)">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Reset logo') }}
+                                        </button>
+                                    </c-button-group>
+                                    <div class="pt-2">
+                                        <div
+                                                class="helptext">{{ t('The small logo is used by notifications.') }}
+                                        </div>
+                                        <div class="helptext">{{ t('Resolution: 250x77') }}</div>
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <c-col md="3">
+                        <c-card class="mb-2">
+                            <c-card-header>
+                                <h6 cCardTitle>{{ t('Interface and Login') }}</h6>
+                            </c-card-header>
+                            <c-card-body>
+                                <img [src]="logoForHtml" class="card-img-top img-fluid img-center">
+                                <hr/>
+                                <div class="form-group">
+                                    <c-button-group>
+                                        <button cButton color="primary" class="ripple"
+                                                (click)="triggerUploadLogoModal(2)">
+                                            <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                            {{ t('Upload') }}
+                                        </button>
+                                        <button cButton color="danger" class="ripple" (click)="resetLogo(2)">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Reset logo') }}
+                                        </button>
+                                    </c-button-group>
+                                    <div class="pt-2">
+                                        <div
+                                                class="helptext">{{ t('The logo is used by the interface and login screen.') }}
+                                        </div>
+                                        <div class="helptext">{{ t('Resolution: 1920x1080') }}</div>
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                    <c-col md="3">
+                        <c-card class="mb-2">
+                            <c-card-header>
+                                <h6 cCardTitle>{{ t('Header logo') }}</h6>
+                            </c-card-header>
+                            <c-card-body>
+                                <img [src]="headerLogoForHtml" class="card-img-top img-fluid img-center"
+                                     style="max-width: 32px;">
+                                <hr/>
+                                <div class="form-group">
+                                    <c-button-group>
+                                        <button cButton color="primary" class="ripple"
+                                                (click)="triggerUploadLogoModal(3)">
+                                            <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                                            {{ t('Upload') }}
+                                        </button>
+                                        <button cButton color="danger" class="ripple" (click)="resetLogo(3)">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                            {{ t('Reset logo') }}
+                                        </button>
+                                    </c-button-group>
+                                    <div class="pt-2">
+                                        <div class="helptext">{{ t('This Logo is used in the page header') }}</div>
+                                        <div class="helptext">{{ t('Resolution: 32x32px') }}</div>
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                </c-row>
+
+                <hr>
+
+                <!-- custom login background  -->
+                <c-row>
+                    <c-col md="12">
+                        <h4>{{ t('Login background image') }}</h4>
+                        <button cButton color="primary" class="ripple mb-3"
+                                (click)="triggerUploadLogoModal(4)">
+                            <fa-icon [icon]="['fas', 'cloud-upload-alt']"></fa-icon>
+                            {{ t('Upload login background') }}
+                        </button>
+                    </c-col>
+                </c-row>
+                <c-row>
+                    <c-col md="12">
+                        <c-card>
+                            <img [src]="customLoginBackgroundHtml" class="card-img-top img-fluid img-center" alt="">
+                            <c-card-body class="card-body">
+                                <div class="form-group">
+                                    <button cButton color="danger" class="ripple" (click)="resetLogo(4)">
+                                        <fa-icon [icon]="['fas', 'trash']">&nbsp;</fa-icon>
+                                        {{ t('Reset background') }}
+                                    </button>
+                                    <div class="pt-2">
+                                        <div
+                                                class="helptext">{{ t('The image is used as background image for the login screen.') }}
+                                        </div>
+                                        <div class="helptext">{{ t('Resolution: 2560x1440') }}</div>
+                                    </div>
+                                </div>
+                            </c-card-body>
+                        </c-card>
+                    </c-col>
+                </c-row>
+
+                <hr/>
+
+                <c-row>
+                    <c-col md="12">
+                        <c-card>
+                            <c-card-header>
+                                <h6 cCardTitle>{{ t('Custom CSS') }}</h6>
+                            </c-card-header>
+                            <c-card-body>
+                                <div class="mb-3">
+                                <textarea cFormControl
+                                          cols="120"
+                                          class="code-font"
+                                          rows="15"
+                                          [(ngModel)]="post.customcsstext"
+                                          id="post.customcsstext"></textarea>
+                                </div>
+                            </c-card-body>
+                            <c-card-footer class="text-end">
+                                <button cButton color="primary" class="ripple" (click)="saveDesign()">
+                                    <fa-icon [icon]="['fab', 'css3']"></fa-icon>
+                                    {{ t('Save custom CSS') }}
+                                </button>
+                            </c-card-footer>
+                        </c-card>
+                    </c-col>
+                </c-row>
+
+            }
 
         </c-card-body>
+        <c-card-footer>
+
+            <c-button-group>
+                <button cButton color="primary" class="ripple"
+                        (click)="triggerUploadDesignModal()">
+                    <fa-icon [icon]="['fas', 'file-upload']"></fa-icon>
+                    {{ t('Import ') }}
+                </button>
+                <a type="button" color="default" cButton class="ripple" href="/design_module/designs/export/">
+                    <fa-icon [icon]="['fas', 'file-download']"></fa-icon>
+                    {{ t('Export current saved design') }}
+                </a>
+            </c-button-group>
+        </c-card-footer>
     </c-card>
 
     <!-- Upload logo modal -->
@@ -212,14 +355,14 @@
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <oitc-select
-                            name="logoType"
-                            id="logoType"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="logoType"
-                            [options]="logTypeOptions"
-                            (onChange)="onLogoTypeChange()"
-                            [appendTo]="''">
+                                name="logoType"
+                                id="logoType"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="logoType"
+                                [options]="logTypeOptions"
+                                (onChange)="onLogoTypeChange()"
+                                [appendTo]="''">
                         </oitc-select>
                     </div>
                 </c-col>
@@ -231,7 +374,7 @@
                             <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
                             {{ t('Max allowed file size: ') }}
                             {{ maxUploadLimit?.string }}.
-                            {{ t('Supported iamge types: .jpg, .png and .gif.') }}
+                            {{ t('Supported image types: .jpg, .png and .gif.') }}
                         </c-col>
                         <c-col lg="12" class="pt-2">
                             <div id="logoDropzone"
@@ -250,6 +393,46 @@
         </c-modal-body>
         <c-modal-footer>
             <button [cModalToggle]="UploadLogoModal.id" cButton color="default" class="ripple">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+
+    <!-- Upload design modal -->
+    <c-modal #UploadDesignModal fullscreen="md" size="lg" id="UploadDesignModal">
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'file-upload']"></fa-icon>
+                {{ t('Upload your Design') }}
+            </h5>
+            <button [cModalToggle]="UploadDesignModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            <c-row>
+                <c-col lg="12">
+                    <div class="form-group">
+                        <c-col lg="12" class="text-info pt-2">
+                            <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                            {{ t('Max allowed file size: ') }}
+                            {{ maxUploadLimit?.string }}.
+                        </c-col>
+                        <c-col lg="12" class="pt-2">
+                            <div id="designDropzone"
+                                 class="design-dropzone dropzone dropzoneStyle">
+                                <div class="dz-message">
+                                    <fa-icon [icon]="['fas', 'file-upload']" size="5x"
+                                             class="mb-3 text-muted"></fa-icon>
+                                    <br>
+                                    <span class="text-uppercase"> {{ t('Drop files here or click to upload.') }} </span>
+                                </div>
+                            </div>
+                        </c-col>
+                    </div>
+                </c-col>
+            </c-row>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [cModalToggle]="UploadDesignModal.id" cButton color="default" class="ripple">
                 {{ t('Close') }}
             </button>
         </c-modal-footer>

@@ -4,7 +4,7 @@
          [ngClass]="{'hide':!visible, 'show':visible, 'sidebar-narrow-unfoldable sidebar-fixed sidebar-static': unfoldable}">
 
         <div class="top-left">
-            <div class="sidebar-header border-bottom">
+            <div class="logoInHeader sidebar-header border-bottom">
                 <div class="sidebar-brand d-flex flex-align-items-center cursor-pointer" [routerLink]="['/']">
                     <img [src]="headerLogoForHtml" width="32"/>
                     <span class="sidebar-brand-full page-logo-text">
@@ -12,8 +12,10 @@
                     </span>
                 </div>
             </div>
-            <oitc-navbar-search [menu]="menu" *ngIf="!unfoldable">
-            </oitc-navbar-search>
+            @if (!unfoldable) {
+                <oitc-navbar-search [menu]="menu">
+                </oitc-navbar-search>
+            }
         </div>
         <!-- [style.color-scheme]="'dark'" - Fix for Safari Menu Scroll -->
         <ul class="sidebar-nav" [style.color-scheme]="'dark'">
@@ -26,23 +28,26 @@
                         <div class="simplebar-content-wrapper" tabindex="0" role="region"
                              aria-label="scrollable content">
 
-                            <div class="simplebar-content" *ngIf="!hasInitialized">
-                                <li class="nav-item mb-2 pt-3">
-                                    <p-skeleton width="45%" [styleClass]="'dark-theme'"></p-skeleton>
-                                </li>
-                                <li class="nav-item mb-2">
-                                    <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
-                                </li>
-                                <li class="nav-item mb-2">
-                                    <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
-                                </li>
-                                <li class="nav-item mb-2">
-                                    <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
-                                </li>
-                                <li class="nav-item mb-2">
-                                    <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
-                                </li>
-                            </div>
+                            @if (!hasInitialized) {
+                                <div class="simplebar-content">
+                                    <li class="nav-item mb-2 pt-3">
+                                        <p-skeleton width="45%" [styleClass]="'dark-theme'"></p-skeleton>
+                                    </li>
+                                    <li class="nav-item mb-2">
+                                        <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
+                                    </li>
+                                    <li class="nav-item mb-2">
+                                        <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
+                                    </li>
+                                    <li class="nav-item mb-2">
+                                        <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
+                                    </li>
+                                    <li class="nav-item mb-2">
+                                        <p-skeleton height="2rem" width="90%" [styleClass]="'dark-theme'"></p-skeleton>
+                                    </li>
+                                </div>
+                            }
+
 
                             <div class="simplebar-content">
                                 @for (headline of menu; track $index) {
@@ -91,4 +96,7 @@
 </div>
 
 <!-- black menu backdrop / close area on mobile devices -->
-<div class="sidebar-backdrop fade show" *ngIf="visible" (click)="hideMenu()"></div>
+@if (visible) {
+    <div class="sidebar-backdrop fade show" *ngIf="visible" (click)="hideMenu()"></div>
+}
+

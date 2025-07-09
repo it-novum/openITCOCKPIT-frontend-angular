@@ -45,6 +45,8 @@ import { HeaderAvatarComponent } from './header-avatar/header-avatar.component';
 import { PushNotificationsComponent } from '../../../components/push-notifications/push-notifications.component';
 import { HeaderInfo, HeaderInfoService } from './header-info.service';
 import { PermissionsService } from '../../../permissions/permissions.service';
+import { DesignsService } from '../../../modules/design_module/pages/designs/designs.service';
+import { DesignsEditRoot } from '../../../modules/design_module/pages/designs/designs.interface';
 
 @Component({
     selector: 'oitc-coreui-header',
@@ -92,6 +94,7 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
     readonly sidebarService: SidebarService = inject(SidebarService);
     private readonly HeaderInfoService: HeaderInfoService = inject(HeaderInfoService);
     public readonly PermissionsService = inject(PermissionsService);
+    private readonly DesignsService: DesignsService = inject(DesignsService);
 
 
     private cdr = inject(ChangeDetectorRef);
@@ -107,6 +110,8 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
 
     constructor() {
         super();
+
+        this.getDesignMode();
         this.#colorModeService.localStorageItemName.set('openitcockpit-theme-default');
         this.#colorModeService.eventName.set('ColorSchemeChange');
 
@@ -127,6 +132,20 @@ export class CoreuiHeaderComponent extends HeaderComponent implements OnDestroy 
             this.info = data;
             this.cdr.markForCheck();
         }));
+    }
+
+    private getDesignMode(): void {
+        this.PermissionsService.hasModuleObservable('DesignModule').subscribe(hasModule => {
+            if (!hasModule) {
+                return;
+            }
+            this.subscriptions.add(this.DesignsService.getMode().subscribe((data: DesignsEditRoot) => {
+                if (data.design && data.design.mode) {
+                    this.#colorModeService.colorMode.set(data.design.mode);
+                }
+                this.cdr.markForCheck();
+            }));
+        });
     }
 
 }

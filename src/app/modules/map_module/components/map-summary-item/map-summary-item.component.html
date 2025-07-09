@@ -8,8 +8,8 @@
              *ngIf="allowView && (item()!.label_possition == 1 || item()!.label_possition == 2)">
             <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
             <img
-                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                onerror="this.src='/map_module/img/items/missing.png';"/>
+                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                    onerror="this.src='/map_module/img/items/missing.png';"/>
             <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
         </div>
 
@@ -17,8 +17,8 @@
              *ngIf="allowView && (item()!.label_possition == 3 || item()!.label_possition == 4)">
             <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
             <img
-                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                onerror="this.src='/map_module/img/items/missing.png';"/>
+                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                    onerror="this.src='/map_module/img/items/missing.png';"/>
             <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
         </div>
     </div>
@@ -30,8 +30,8 @@
              *ngIf="allowView && (item()!.label_possition == 1 || item()!.label_possition == 2)">
             <div [hidden]="!(item()!.show_label && item()!.label_possition == 1)">{{ label }}</div>
             <img
-                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                onerror="this.src='/map_module/img/items/missing.png';"/>
+                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                    onerror="this.src='/map_module/img/items/missing.png';"/>
             <div [hidden]="!(item()!.show_label && item()!.label_possition == 2)">{{ label }}</div>
         </div>
 
@@ -39,8 +39,8 @@
              *ngIf="allowView && (item()!.label_possition == 3 || item()!.label_possition == 4)">
             <span [hidden]="!(item()!.show_label && item()!.label_possition == 4)">{{ label }}</span>
             <img
-                [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
-                onerror="this.src='/map_module/img/items/missing.png';"/>
+                    [src]="'/angular/getHostAndServiceStateSummaryIcon/' + item()!.size_x + '/' + bitMaskHostState + '/' + bitMaskServiceState + '/.png'"
+                    onerror="this.src='/map_module/img/items/missing.png';"/>
             <span [hidden]="!(item()!.show_label && item()!.label_possition == 3)">{{ label }}</span>
         </div>
     </div>

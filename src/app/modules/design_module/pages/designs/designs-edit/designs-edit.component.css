@@ -13,3 +13,8 @@
     margin-right: auto;
     display: block;
 }
+
+
+.mr-5 {
+    margin-right: 5px;
+}
