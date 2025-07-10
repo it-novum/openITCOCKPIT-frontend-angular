@@ -2,7 +2,7 @@
 
     <fieldset>
         <legend class="fs-md fieldset-legend-border-bottom">
-            <h4>
+            <h4 [ngClass]="{'text-danger': titleErrorField() && errors.hasOwnProperty(titleErrorField())}">
                 {{ title() }}
             </h4>
             <span class="help-block italic text-primary">

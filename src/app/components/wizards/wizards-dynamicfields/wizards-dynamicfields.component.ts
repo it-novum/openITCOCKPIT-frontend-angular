@@ -20,7 +20,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Service } from '../../../pages/wizards/wizards.interface';
@@ -42,7 +42,8 @@ import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/for
         RowComponent,
         TranslocoPipe,
         TranslocoDirective,
-        FormFeedbackComponent
+        FormFeedbackComponent,
+        NgClass
     ],
     templateUrl: './wizards-dynamicfields.component.html',
     styleUrl: './wizards-dynamicfields.component.css',
@@ -53,6 +54,7 @@ export class WizardsDynamicfieldsComponent implements OnChanges {
     protected searchedTags: string[] = [];
 
     public title = input.required<string>();
+    public titleErrorField = input<string>('');
 
     @Input() post: Service[] = [];
     @Input() errors: GenericValidationError = {} as GenericValidationError;

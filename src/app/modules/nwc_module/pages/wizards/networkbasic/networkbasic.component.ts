@@ -29,7 +29,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
@@ -71,7 +71,8 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
         BackButtonDirective,
         FormFeedbackComponent,
         FormErrorDirective,
-        FormsModule
+        FormsModule,
+        NgClass
     ],
     templateUrl: './networkbasic.component.html',
     styleUrl: './networkbasic.component.css',
@@ -80,7 +81,6 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 export class NetworkbasicComponent extends WizardsAbstractComponent {
     @ViewChild(WizardsDynamicfieldsComponent) childComponentLocal!: WizardsDynamicfieldsComponent;
     protected override WizardService: NetworkbasicWizardService = inject(NetworkbasicWizardService);
-    protected snmpErrors: GenericValidationError = {} as GenericValidationError;
 
     protected override post: NetworkbasicWizardPost = {
 // Default fields from the base wizard
@@ -211,9 +211,10 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
         this.post.interfaces = [];
         this.cdr.markForCheck();
         this.WizardService.executeSNMPDiscovery(this.post).subscribe((data: any) => {
+            this.errors = {} as GenericValidationError;
             this.cdr.markForCheck();
             // Error
-            if (!data.error) {
+            if (data.interfaces) {
                 for (let key in data.interfaces) {
                     let servicetemplatecommandargumentvalues = JSON.parse(JSON.stringify(this.interfaceServicetemplate.servicetemplatecommandargumentvalues));
                     servicetemplatecommandargumentvalues[0].value = data.interfaces[key].value.name;
@@ -234,8 +235,9 @@ export class NetworkbasicComponent extends WizardsAbstractComponent {
             this.notyService.genericError();
             const errorResponse: GenericValidationError = data.data as GenericValidationError;
             if (data.data) {
-                this.snmpErrors = errorResponse;
+                this.errors = errorResponse;
             }
+            this.cdr.markForCheck();
         });
     }
 }
