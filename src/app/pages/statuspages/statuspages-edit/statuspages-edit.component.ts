@@ -291,7 +291,7 @@ export class StatuspagesEditComponent implements OnInit, OnDestroy {
             container_id: null,
             name: '',
             description: '',
-           // public_title: '',
+            public_title: '',
             public: false,
             show_downtimes: false,
             show_downtime_comments: false,

@@ -20,9 +20,9 @@
     </nav>
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ t('Status pages') }}
-                <small class="fw-300">
-                    {{ t('overview') }}
+            <h5 cCardTitle>{{ t('Status page') }}
+                <small class="fw-300" *ngIf="statuspage">
+                    {{ statuspage.Statuspage.statuspage.name }}
                 </small>
             </h5>
 
@@ -85,7 +85,7 @@
                         </div>
                         <div class="flex-1">
                             <c-row class="p-2">
-                                <div class="col-12 text-truncate h5" *ngIf="item.type === 'host'">
+                                <div class="col-12 text-truncate h4" *ngIf="item.type === 'host'">
                                     @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                         <a [routerLink]="['/', 'hosts', 'browser', item.id]">
                                             {{ item.name }}
@@ -94,7 +94,7 @@
                                         {{ item.name }}
                                     }
                                 </div>
-                                <div class="col-12 text-truncate h5" *ngIf="item.type === 'service'">
+                                <div class="col-12 text-truncate h4" *ngIf="item.type === 'service'">
                                     @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                         <a [routerLink]="['/', 'services', 'browser', item.id]">
                                             {{ item.name }}
@@ -103,7 +103,7 @@
                                         {{ item.name }}
                                     }
                                 </div>
-                                <div class="col-12 text-truncate h5" *ngIf="item.type === 'hostgroup'">
+                                <div class="col-12 text-truncate h4" *ngIf="item.type === 'hostgroup'">
                                     @if (this.PermissionsService.hasPermissionObservable(['hostgroups', 'extended'])|async) {
                                         <a [routerLink]="['/', 'hostgroups', 'extended', item.id]">
                                             {{ item.name }}
@@ -112,7 +112,7 @@
                                         {{ item.name }}
                                     }
                                 </div>
-                                <div class="col-12 text-truncate h5" *ngIf="item.type === 'servicegroup'">
+                                <div class="col-12 text-truncate h4" *ngIf="item.type === 'servicegroup'">
                                     @if (this.PermissionsService.hasPermissionObservable(['servicegroups', 'extended'])|async) {
                                         <a [routerLink]="['/', 'servicegroups', 'extended', item.id]">
                                             {{ item.name }}
@@ -122,7 +122,7 @@
                                     }
                                 </div>
                                 <div class="col-12">
-                                    <h6 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName }}</h6>
+                                    <h5 class="{{item.cumulatedColor}}">{{ item.cumulatedStateName }}</h5>
                                 </div>
                                 <!-- Handle acknowledgement comments -->
                                 <div class="col-12 text-truncate">
