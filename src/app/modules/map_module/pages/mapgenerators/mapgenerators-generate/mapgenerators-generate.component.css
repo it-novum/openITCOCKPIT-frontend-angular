@@ -1,0 +1,30 @@
+display-4 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.57;
+}
+
+/* line-heights */
+.l-h-n {
+    line-height: normal;
+}
+
+.fw-500 {
+    font-weight: 500 !important;
+}
+
+h5 small,
+h6 small,
+.h5 small,
+.h6 small {
+    font-size: 0.8125rem;
+}
+
+.font-5-rem {
+    font-size: 5rem;
+}
+
+.pos-bottom-negative-23 {
+    bottom: -23px;
+}
+

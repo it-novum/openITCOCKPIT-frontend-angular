@@ -1,0 +1,155 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['mapmodule', 'mapgenerators', 'index']"
+                   [routerLink]="['/', 'map_module', 'mapgenerators', 'index']">
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    {{ t('Map generators') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                {{ t('Add') }}
+            </li>
+        </ol>
+    </nav>
+
+    <form cForm (ngSubmit)="submit()">
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Create new map generator') }}</h5>
+
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['map_module', 'mapgenerators', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+
+            </c-card-header>
+            <c-card-body>
+
+                <div class="mb-3">
+                    <label cLabel for="mapgenerator_container">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+
+                    <oitc-multi-select
+                        name="mapgenerator_container"
+                        id="mapgenerator_container"
+                        optionValue="key"
+                        optionLabel="value"
+                        [(ngModel)]="post.Mapgenerator.containers._ids"
+                        [options]="containers"
+                        [debounce]="true"
+                        oitcFormError [errors]="errors" errorField="containers">
+                    </oitc-multi-select>
+                    @if (post.Mapgenerator.containers._ids.length === 0) {
+                        <div class="text-warning-glow pt-1">
+                            {{ t('Please select a container.') }}
+                        </div>
+                    }
+                    <oitc-form-feedback [errors]="errors" errorField="containers"></oitc-form-feedback>
+                    <div class="col-12 help-block text-info">
+                        <fa-icon [icon]="['fas', 'info-circle']"></fa-icon>
+                        {{ t('The specified containers must appear in the container hierarchy of the host and is also the starting point so that the host is taken into account during generation.') }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="mapgenerator_name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_name"
+                           required
+                           type="text"
+                           name="mapgenerator_name"
+                           oitcFormError [errors]="errors" errorField="name"
+                           [(ngModel)]="post.Mapgenerator.name">
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="description">
+                        {{ t('Description') }}
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_description"
+                           type="text"
+                           name="mapgenerator_description"
+                           oitcFormError [errors]="errors" errorField="description"
+                           [(ngModel)]="post.Mapgenerator.description">
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <div class="mt-4">
+                    <h5>
+                        {{ t('Generator Configuration:') }}
+                    </h5>
+                </div>
+                <hr class="border-dashed">
+
+                <div class="mb-3">
+                    <label cLabel for="mapgenerator_interval">
+                        {{ t('Map interval') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_interval"
+                           type="number"
+                           name="mapgenerator_interval"
+                           min="10"
+                           step="5"
+                           [(ngModel)]="post.Mapgenerator.interval"
+                           oitcFormError [errors]="errors" errorField="interval">
+                    <oitc-form-feedback [errors]="errors" errorField="interval"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="mapgenerator_items_per_line">
+                        {{ t('Items per line') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           id="mapgenerator_items_per_line"
+                           type="number"
+                           name="mapgenerator_items_per_line"
+                           min="5"
+                           [(ngModel)]="post.Mapgenerator.items_per_line"
+                           oitcFormError [errors]="errors" errorField="items_per_line">
+                    <oitc-form-feedback [errors]="errors" errorField="items_per_line"></oitc-form-feedback>
+                </div>
+
+            </c-card-body>
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="primary" type="submit">
+                    {{ t('Create map generator') }}
+                </button>
+                <button [fallbackUrl]="['map_module', 'mapgenerators', 'index']" cButton class="ms-1 ripple"
+                        color="default"
+                        oitcBackButton
+                        type="button">
+                    {{ t('Cancel') }}
+                </button>
+            </c-card-footer>
+        </c-card>
+    </form>
+</ng-container>

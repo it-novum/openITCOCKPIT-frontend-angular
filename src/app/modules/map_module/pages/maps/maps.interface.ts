@@ -58,17 +58,19 @@ export interface MapsIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'filter[Maps.name]': string,
     'filter[Maps.title]': string,
+    'filter[Maps.id][]': number[],
 }
 
 export function getDefaultMapsIndexParams(): MapsIndexParams {
     return {
         angular: true,
-        scroll: false,
+        scroll: true,
         sort: 'Maps.name',
         page: 1,
         direction: 'asc',
         'filter[Maps.name]': "",
         'filter[Maps.title]': "",
+        'filter[Maps.id][]': [],
     }
 }
 

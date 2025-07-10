@@ -1,0 +1,274 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                {{ t('Map Module') }}
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['mapmodule', 'mapgenerators', 'index']"
+                   [routerLink]="['/', 'map_module', 'mapgenerators', 'index']">
+                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                    {{ t('Map generators') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-stack style="min-width: 1rem">
+                    <fa-icon [icon]="['fas', 'layer-group']"
+                             stackItemSize="1x"></fa-icon>
+                    <fa-icon [icon]="['fas', 'plus']" class="text-success"
+                             stackItemSize="1x"
+                             transform="shrink-8 right-3 down-7"></fa-icon>
+                </fa-stack>
+                {{ t('Generate') }}
+            </li>
+        </ol>
+    </nav>
+
+    <oitc-form-loader [isVisible]="init"></oitc-form-loader>
+
+    @if (!init) {
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>{{ t('Map generator:') }}
+                    <small class="fw-300">
+                        {{ mapgenerator.name }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button [fallbackUrl]="['map_module', 'mapgenerators', 'index']" cButton class="ripple"
+                                color="default"
+                                oitcBackButton
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'left-long']"></fa-icon>
+                            {{ t('Back') }}
+                        </button>
+                    </c-nav-item>
+                    <c-nav-item class="px-1">
+                        <button [routerLink]="['/', 'map_module', 'mapgenerators', 'edit', mapgeneratorId]" cButton
+                                *oitcPermission="['mapmodule', 'mapgenerators', 'edit']"
+                                class="ripple"
+                                color="default"
+                                size="xs">
+                            <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            {{ t('Edit') }}
+                        </button>
+                    </c-nav-item>
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+
+                <c-row>
+                    <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1 mb-2">
+                        <table cTable bordered>
+                            <tbody>
+
+                            <tr>
+                                <td>{{ t('Description') }}</td>
+                                <td class="word-break">
+                                    {{ mapgenerator.description }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>{{ t('Map interval') }}</td>
+                                <td>
+                                    {{ mapgenerator.interval }}
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>{{ t('Items per line') }}</td>
+                                <td>
+                                    {{ mapgenerator.items_per_line }}
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </c-col>
+
+                    <c-col [xs]="12" [sm]="12" [md]="3">
+                        <div
+                            class="p-2 bg-primary rounded overflow-hidden position-relative text-white mb-g">
+                            <div>
+                                <h6 class="display-4 d-block l-h-n m-0 fw-500">
+                                    @if (this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'index']) | async) {
+                                        <span class="badge-clickable"
+                                              [hidden]="!(mapCount>0)"
+                                              [routerLink]="['/', 'map_module', 'maps', 'index']"
+                                              [queryParams]="{'filter.Maps.id': allGeneratedMaps}">
+                                            {{ mapCount }}
+                                        </span>
+                                        <span [hidden]="mapCount>0">
+                                            {{ mapCount }}
+                                        </span>
+                                    } @else {
+                                        <span>
+                                            {{ mapCount }}
+                                        </span>
+                                    }
+                                    <small class="d-block m-0 l-h-n">
+                                        {{ t('Maps Generated') }}
+                                    </small>
+                                </h6>
+                            </div>
+                            <fa-icon [icon]="['fas', 'map-marker']"
+                                     class="position-absolute pos-right pos-bottom-negative-23 opacity-15 font-5-rem"></fa-icon>
+                        </div>
+                    </c-col>
+                </c-row>
+
+                <c-row>
+                    <c-col [xs]="12">
+
+                        @if (isGeneratorRunning) {
+                            <!-- Loading box -->
+                            <div class="alert border-faded bg-transparent text-secondary">
+                                <div class="d-flex align-items-center">
+                                    <div class="alert-icon me-2">
+                                        <span class="icon-stack icon-stack-md">
+                                            <i class="base-circle icon-stack-3x text-cyan-500"></i>
+                                            <i class="fas fa-hourglass-start icon-stack-1x text-white"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <span class="h5 text-cyan-500">
+                                            {{ t('Waiting for Map generator data.') }}
+                                        </span>
+
+                                        <div class="mt-2">
+                                            <p-progressBar mode="indeterminate"
+                                                           [style]="{ height: '6px' }"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (isGeneratorFinished) {
+                            <c-card [cBorder]="{top: {color: 'primary', width: 3}}"
+                                    class="mb-3">
+                                <c-card-header>
+                                    <fa-icon [icon]="['fas', 'tasks']"></fa-icon>
+                                    {{ t('Overview') }}
+                                </c-card-header>
+                                <c-card-body>
+                                    @if (!generationSuccessfully) {
+                                        <c-row>
+                                            <c-col [xs]="12" class="mb-2">
+                                                <c-alert [color]="'danger'">
+                                                    <h5 class="alert-heading">
+                                                        <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                                        {{ t('Error') }}
+                                                    </h5>
+                                                    {{ t('Error while generating maps.') }}
+                                                    <c-row>
+                                                        <c-col [xs]="12" class="mb-1">
+                                                            @for (errorByField of errors; track $index) {
+                                                                @for (error of errorByField.errors; track $index) {
+                                                                    <div>
+                                                                        {{ error.errorMessage }}
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </c-col>
+                                                    </c-row>
+                                                </c-alert>
+                                            </c-col>
+
+                                        </c-row>
+                                    }
+
+                                    <c-row>
+                                        @if (generatedMapsAndItems) {
+                                            <c-col [xs]="12" [sm]="12" [md]="12" class="mt-1 mb-2">
+                                                <table cTable bordered>
+                                                    <tbody>
+
+                                                    <tr>
+                                                        <td>
+                                                            @if (allGeneratedMaps.length) {
+                                                                <a *oitcPermission="['mapmodule','maps', 'index']"
+                                                                   [routerLink]="['/', 'map_module', 'maps', 'index']"
+                                                                   [queryParams]="{'filter.Maps.id': allGeneratedMaps}">
+                                                                    {{ t('Total generated maps') }}
+                                                                </a>
+                                                                <span
+                                                                    *oitcPermission="['mapmodule','maps', 'index']; negate: true">
+                                                                    {{ t('Total generated maps') }}
+                                                                </span>
+                                                            } @else {
+                                                                {{ t('Total generated maps') }}
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {{ generatedMapsAndItems.amountOfTotalMaps }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>
+                                                            @if (newGeneratedMaps.length) {
+                                                                <a *oitcPermission="['mapmodule','maps', 'index']"
+                                                                   [routerLink]="['/', 'map_module', 'maps', 'index']"
+                                                                   [queryParams]="{'filter.Maps.id': newGeneratedMaps}">
+                                                                    {{ t('New generated maps') }}
+                                                                </a>
+                                                                <span
+                                                                    *oitcPermission="['mapmodule','maps', 'index']; negate: true">
+                                                                    {{ t('New generated maps') }}
+                                                                </span>
+                                                            } @else {
+                                                                {{ t('New generated maps') }}
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {{ generatedMapsAndItems.amountOfNewGeneratedMaps }}
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>{{ t('New generated items') }}</td>
+                                                        <td>
+                                                            {{ generatedMapsAndItems.amountOfNewGeneratedItems }}
+                                                        </td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </c-col>
+                                        }
+                                    </c-row>
+                                </c-card-body>
+                            </c-card>
+                        }
+                    </c-col>
+
+                </c-row>
+
+            </c-card-body>
+
+            <c-card-footer class="text-end">
+                <button cButton class="ripple" color="success" type="button"
+                        [disabled]="isGeneratorRunning"
+                        (click)="generate()">
+                    @if (!isGeneratorRunning) {
+                        <fa-icon [icon]="['fas', 'rocket']"></fa-icon>
+                    }
+                    @if (isGeneratorRunning) {
+                        <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                    }
+                    {{ t('Launch Map generator') }}
+                </button>
+            </c-card-footer>
+
+        </c-card>
+    }
+</ng-container>

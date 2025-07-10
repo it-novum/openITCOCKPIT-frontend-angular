@@ -49,7 +49,7 @@ export interface RotationsIndexParams {
 export function getDefaultRotationsIndexParams(): RotationsIndexParams {
     return {
         angular: true,
-        scroll: false,
+        scroll: true,
         sort: 'Rotations.name',
         page: 1,
         direction: 'asc',
