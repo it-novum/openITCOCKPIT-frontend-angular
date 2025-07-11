@@ -45,60 +45,92 @@
                     </button>
                 </c-nav-item>
                 <c-nav-item class="px-1">
-                    <c-dropdown *ngIf="importers.length > 0">
+                    @if (isLoadingImporters) {
                         <button *oitcPermission="['ImportModule', 'ImportedHosts', 'add']"
-                                cButton cDropdownToggle
-                                [disabled]="importers.length===0"
+                                cButton
+                                [disabled]="true"
                                 color="success"
                                 size="xs">
-                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                            {{ t('Start import') }}
+                            <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            {{ t('Loading importers...') }}
                         </button>
-                        <ul cDropdownMenu>
-                            <li *ngFor="let importer of importers">
-                                <button (click)="loadImporter(importer)"
-                                        cDropdownItem
-                                        class="ripple"
-                                        [disabled]="showSpinner">
-                                    @switch (importer.data_source) {
-                                        @case ("csv_with_header") {
-                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                    }
+
+                    @if (!isLoadingImporters && importers.length > 0) {
+                        <c-dropdown>
+                            <button *oitcPermission="['ImportModule', 'ImportedHosts', 'add']"
+                                    cButton cDropdownToggle
+                                    [disabled]="importers.length===0"
+                                    color="success"
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                {{ t('Start import') }}
+                            </button>
+                            <ul cDropdownMenu>
+                                <li *ngFor="let importer of importers">
+                                    <button (click)="loadImporter(importer)"
+                                            cDropdownItem
+                                            class="ripple"
+                                            [disabled]="showSpinner">
+                                        @switch (importer.data_source) {
+                                            @case ("csv_with_header") {
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            }
+                                            @case ("csv_without_header") {
+                                                <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                            }
+                                            @case ("itop") {
+                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                            }
+                                            @case ("idoit") {
+                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                            }
+                                            @case ("openitcockpit_agent") {
+                                                <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                                            }
+                                            @case ("external_monitoring") {
+                                                <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
+                                            }
+                                            @default {
+                                                <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
+                                            }
                                         }
-                                        @case ("csv_without_header") {
-                                            <fa-icon [icon]="['fas', 'file-csv']"></fa-icon>
+                                        {{ importer.name }}
+                                        @if (importer.connected !== null) {
+                                            <span>
+                                                @if (importer.connected) {
+                                                    <sup
+                                                        class="badge rounded-pill border border-success text-success connect-badge">
+                                                        {{ t('ONLINE') }}
+                                                    </sup>
+                                                } @else {
+                                                    <sup
+                                                        class="badge rounded-pill border border-danger text-danger connect-badge">
+                                                        {{ t('OFFLINE') }}
+                                                    </sup>
+                                                }
+                                            </span>
                                         }
-                                        @case ("itop") {
-                                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                        }
-                                        @case ("idoit") {
-                                            <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                        }
-                                        @case ("openitcockpit_agent") {
-                                            <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
-                                        }
-                                        @case ("external_monitoring") {
-                                            <fa-icon [icon]="['fas', 'tower-observation']"></fa-icon>
-                                        }
-                                        @default {
-                                            <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
-                                        }
-                                    }
-                                    {{ importer.name }}
-                                    <span *ngIf="importer.connected !== null">
-                                        <sup *ngIf="importer.connected"
-                                             class="badge rounded-pill border border-success text-success connect-badge">
-                                            {{ t('ONLINE') }}
-                                        </sup>
-                                        <sup *ngIf="!importer.connected"
-                                             class="badge rounded-pill border border-danger text-danger connect-badge">
-                                            {{ t('OFFLINE') }}
-                                        </sup>
-                                    </span>
-                                </button>
-                            </li>
-                        </ul>
-                    </c-dropdown>
+
+                                    </button>
+                                </li>
+                            </ul>
+                        </c-dropdown>
+                    }
                 </c-nav-item>
+                @if (!isLoadingImporters && importers.length === 0) {
+                    <c-nav-item>
+                        <div class="pe-2">
+                            <button cButton
+                                    [disabled]="true"
+                                    color="danger"
+                                    size="xs">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+                                {{ t('No importers defined') }}
+                            </button>
+                        </div>
+                    </c-nav-item>
+                }
                 <c-nav-item>
                     <button *oitcPermission="['hosts', 'add']"
                             cButton
@@ -112,14 +144,6 @@
                         <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                         {{ t('Synchronize with monitoring') }}
                     </button>
-                </c-nav-item>
-                <c-nav-item>
-                    <div class="pe-2">
-                        <c-badge color="danger" *ngIf="importers.length===0">
-                            <fa-icon [icon]="['fas', 'exclamation-triangle']"></fa-icon>
-                            {{ t('No importers defined') }}
-                        </c-badge>
-                    </div>
                 </c-nav-item>
                 <c-nav-item>
                     <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
@@ -501,12 +525,13 @@
                                 {{ t('NEW') }}
                             </c-badge>
                             @if (importedhost.imported === 1 && ( importedhost.host && importedhost.host.disabled === 0 )) {
-                                <c-badge color="info" *oitcPermission="['hosts', 'browser']"
-                                         [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
-                                         class="cursor-pointer">
-                                    <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
-                                    {{ t('In monitoring') }}
-                                </c-badge>
+                                <a [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
+                                   *oitcPermission="['hosts', 'browser']">
+                                    <c-badge color="info">
+                                        <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
+                                        {{ t('In monitoring') }}
+                                    </c-badge>
+                                </a>
                                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     <fa-icon [icon]="['fas', 'binoculars']"></fa-icon>
                                     {{ t('In monitoring') }}
@@ -524,12 +549,14 @@
                                 </c-badge>
                             }
                             @if (importedhost.host && importedhost.host.disabled === 1) {
-                                <c-badge color="warning" *oitcPermission="['hosts', 'browser']"
-                                         [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]"
-                                         class="cursor-pointer text-white">
-                                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
-                                    {{ t('In monitoring (disabled)') }}
-                                </c-badge>
+                                <a *oitcPermission="['hosts', 'browser']"
+                                   [routerLink]="['/', 'hosts', 'browser', importedhost.host_id]">
+                                    <c-badge color="warning"
+                                             class="text-white">
+                                        <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                                        {{ t('In monitoring (disabled)') }}
+                                    </c-badge>
+                                </a>
                                 <span *oitcPermission="['hosts', 'browser']; negate: true">
                                     <fa-icon [icon]="['fas', 'plug']"></fa-icon>
                                     {{ t('In monitoring (disabled)') }}
@@ -784,7 +811,8 @@
                                         </c-badge>
                                     </li>
                                 }
-                                @for (service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
+                                @for (
+                                    service of importedhost.oitc_agent_services_overview.not_deletable; track $index) {
                                     <li class="ms-3"
                                         [title]="' Service used by other objects.'|transloco">
                                         <a *oitcPermission="['services', 'browser']"

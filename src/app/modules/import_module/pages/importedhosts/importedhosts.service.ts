@@ -17,6 +17,7 @@ import {
     ImportedhostsIndexRoot
 } from './importedhosts.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
+import { Importer } from '../importers/importers.interface';
 
 
 @Injectable({
@@ -42,6 +43,17 @@ export class ImportedhostsService {
         )
     }
 
+    public getImporters(): Observable<{ importers: Importer[] }> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<{
+            importers: Importer[]
+        }>(`${proxyPath}/import_module/imported_hosts/getImporters.json`).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
     public synchronizeWithMonitoring(): Observable<GenericSuccessAndMessageResponse> {
         const proxyPath = this.proxyPath;
         return this.http.post<GenericSuccessAndMessageResponse>(`${proxyPath}/import_module/imported_hosts/synchronizeWithMonitoring/.json?angular=true.json`, {
@@ -54,6 +66,7 @@ export class ImportedhostsService {
             })
         );
     }
+
     /**********************
      *    Delete action    *
      **********************/

@@ -142,6 +142,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public importedhosts: Importedhost[] = [];
     public importers: Importer[] = [];
+    public isLoadingImporters: boolean = true;
     public maxUploadLimit?: MaxUploadLimit;
     public hideFilter: boolean = true;
     public selectedItems: DeleteAllItem[] = [];
@@ -178,6 +179,7 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
             // You can do something with these parameters here.
             //console.log(params);
             this.load();
+            this.loadImporters();
         }));
     }
 
@@ -248,7 +250,6 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
             .subscribe((result) => {
                 this.allImportedHosts = result;
                 this.importedhosts = result.importedhosts;
-                this.importers = result.importers;
                 this.maxUploadLimit = result.maxUploadLimit;
                 this.cdr.markForCheck();
             })
@@ -363,6 +364,20 @@ export class ImportedHostsIndexComponent implements OnInit, OnDestroy {
 
     public hasFlag(importedHostFlag: number, compareFlag: ImportedHostFlagsEnum) {
         return importedHostFlag & compareFlag;
+    }
+
+    public loadImporters() {
+        this.importers = [];
+        this.isLoadingImporters = true;
+        this.cdr.markForCheck();
+
+        this.subscriptions.add(this.ImportedhostsService.getImporters()
+            .subscribe((result) => {
+                this.importers = result.importers;
+                this.isLoadingImporters = false;
+                this.cdr.markForCheck();
+            })
+        );
     }
 
     protected readonly Object = Object;
