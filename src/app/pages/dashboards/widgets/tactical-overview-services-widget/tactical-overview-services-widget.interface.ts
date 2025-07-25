@@ -1,8 +1,8 @@
-import { HostgroupSummaryStateServices } from '../../../hosts/summary_state.interface';
+import { SummaryStateServices } from '../../../hosts/summary_state.interface';
 
 export interface TacticalOverviewServicesResponse {
     config: TacticalOverviewServicesConfig
-    servicestatusSummary: HostgroupSummaryStateServices
+    servicestatusSummary: SummaryStateServices
     _csrfToken: string
 }
 

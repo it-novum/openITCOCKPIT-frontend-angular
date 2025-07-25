@@ -69,7 +69,6 @@ import {
     ActionsButtonElementComponent
 } from '../../../components/actions-button-element/actions-button-element.component';
 import { CopyToClipboardComponent } from '../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { DeleteAllModalComponent } from '../../../layouts/coreui/delete-all-modal/delete-all-modal.component';
 import { DisableModalComponent } from '../../../layouts/coreui/disable-modal/disable-modal.component';
@@ -94,7 +93,7 @@ import {
 import { HoststatusIconComponent } from '../../hosts/hoststatus-icon/hoststatus-icon.component';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { AsyncPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import {
@@ -176,8 +175,6 @@ import { TitleService } from '../../../services/title.service';
         MultiSelectComponent,
         NavComponent,
         NavItemComponent,
-        NgForOf,
-        NgIf,
         NgSelectComponent,
         NoRecordsComponent,
         PaginateOrScrollComponent,
@@ -208,8 +205,8 @@ import { TitleService } from '../../../services/title.service';
     templateUrl: './browsers-index.component.html',
     styleUrl: './browsers-index.component.css',
     providers: [
-        { provide: DISABLE_SERVICE_TOKEN, useClass: HostsService },
-        { provide: DELETE_SERVICE_TOKEN, useClass: HostsService } // Inject the ServicesService into the DeleteAllModalComponent
+        {provide: DISABLE_SERVICE_TOKEN, useClass: HostsService},
+        {provide: DELETE_SERVICE_TOKEN, useClass: HostsService} // Inject the ServicesService into the DeleteAllModalComponent
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -250,6 +247,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public containerId: number = 0;
     public containers?: BrowsersIndexResponse;
+    public organizationalCharts: SelectKeyValue[] = [];
     public statusCounts?: StatuscountResponse;
     public containerFilter: string = '';
     public hosts?: HostsIndexRoot;
@@ -303,7 +301,8 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     public ngOnInit(): void {
         this.loadColumns();
         this.route.queryParams.subscribe(params => {
-            let containerId = params['containerId'] || ROOT_CONTAINER
+            let containerId = params['containerId'] || ROOT_CONTAINER;
+            this.organizationalCharts = [];
             if (containerId) {
                 this.params.BrowserContainerId = parseInt(containerId, 10);
                 this.containerId = parseInt(containerId, 10);
@@ -314,6 +313,7 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.subscriptions.add(this.BrowsersService.getIndex(this.containerId)
                 .subscribe((result) => {
                     this.containers = result;
+                    this.organizationalCharts = result.organizationalCharts;
                     this.cdr.markForCheck();
 
                     // Update the title.
@@ -335,10 +335,6 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
-    }
-
-    public loadContainers() {
-
     }
 
     private loadStatusCounts(containerId: number) {
@@ -865,4 +861,5 @@ export class BrowsersIndexComponent implements OnInit, OnDestroy, IndexPage {
     protected readonly HostBrowserTabs = HostBrowserTabs;
 
     protected readonly ContainerTypesEnum = ContainerTypesEnum;
+    protected readonly ROOT_CONTAINER = ROOT_CONTAINER;
 }

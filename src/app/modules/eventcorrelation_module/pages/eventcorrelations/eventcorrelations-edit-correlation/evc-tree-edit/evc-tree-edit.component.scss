@@ -1,3 +1,6 @@
+@use "../../../../assets/evc_flow";
+@use "../../../../assets/eventcorrelation_module.scss";
+
 .f-group {
     border-left: var(--cui-card-border-width) dashed var(--cui-card-border-color);
     border-right: var(--cui-card-border-width) dashed var(--cui-card-border-color);
@@ -31,8 +34,8 @@
     align-items: center;
     border: 3px solid #0000;
     background: linear-gradient(var(--node-background-color), var(--node-background-color)) padding-box, conic-gradient(
-        from var(--angle) at 50% 50%,
-        #f7ff0a, #ffac1d, #ff833a, #ff5b50, #cd1371, #a50479
+            from var(--angle) at 50% 50%,
+            #f7ff0a, #ffac1d, #ff833a, #ff5b50, #cd1371, #a50479
     ) border-box;
     animation: 4s rotate linear infinite;
 }

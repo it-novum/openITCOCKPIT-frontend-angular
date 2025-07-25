@@ -1,0 +1,169 @@
+<div class="oc-wrapper">
+    <f-flow class="oc-flow"
+            fDraggable
+            (fLoaded)="onInitialized()">
+
+        <f-background>
+            <f-circle-pattern></f-circle-pattern>
+        </f-background>
+
+        <f-line-alignment></f-line-alignment>
+        <f-canvas fZoom>
+
+            @for (node of nodes; track node.fNodeId; ) {
+                <oitc-oc-node-viewer [node]="node"
+                                     [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE}"
+                                     [fNodeId]="String(node.node.id)"
+                                     fNode
+                                     fNodeInput
+                                     [fInputId]="String(node.node.id)"
+                                     [fInputMultiple]="true"
+                                     [fInputConnectableSide]="EFConnectableSide.TOP"
+                                     [fNodePosition]="node.position"
+                                     [connectionsInput]="connections()"
+                                     [containerType]="node.node.containertype_id"
+                                     (onViewNodeDetails)="onViewNodeDetails($event)">
+                </oitc-oc-node-viewer>
+            }
+
+            @for (connection of connections(); track connection.id) {
+                <f-connection
+                    [fOffset]="20"
+                    [fBehavior]="EFConnectionBehavior.FIXED"
+                    [fType]="EFConnectionType.SEGMENT"
+                    [fConnectionId]="String(connection.id)"
+                    [fOutputId]="String(connection.organizational_chart_output_node_id)"
+                    [fInputId]="String(connection.organizational_chart_input_node_id)">
+
+                    <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5"
+                         [width]="5"
+                         [refX]="4" [refY]="2.5">
+                        <path d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+
+                    <svg id="selected_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.SELECTED_END"
+                         [height]="5"
+                         [width]="5" [refX]="4" [refY]="2.5">
+                        <path d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+
+                </f-connection>
+            }
+        </f-canvas>
+
+        <f-selection-area></f-selection-area>
+
+        <!-- Wrap this component in a card to make sure that the CoreUi CSS variables for the minimap are applied -->
+        <f-minimap [fMinSize]="1000"></f-minimap>
+
+    </f-flow>
+</div>
+
+<ng-container *transloco="let t">
+
+    <!-- View Node Details Modal -->
+    <c-modal #ocNodeDetailsModal
+             [keyboard]="true"
+             [id]="'ocNodeDetailsModal'"
+             [size]="'lg'">
+        <c-modal-header>
+            <h5 cModalTitle>
+                {{ t('Details') }}:
+                @if (currentNodeForModal && currentNodeForModal.node) {
+                    <small class="fw-300">
+                        {{ currentNodeForModal.node.container?.name }}
+                    </small>
+                }
+            </h5>
+            <button [cModalToggle]="ocNodeDetailsModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+
+            @if (currentNodeForModal) {
+
+                <dl class="row">
+                    @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_TENANT) {
+                        <dt class="col-sm-3"> {{ t('Tenant') }}</dt>
+                        <dd class="col-sm-9">{{ currentNodeForModal.node.container?.name }}</dd>
+                    }
+
+                    @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_LOCATION) {
+                        <dt class="col-sm-3"> {{ t('Location') }}</dt>
+                        <dd class="col-sm-9">{{ currentNodeForModal.node.container?.name }}</dd>
+                    }
+
+                    @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_NODE) {
+                        <dt class="col-sm-3"> {{ t('Node') }}</dt>
+                        <dd class="col-sm-9">{{ currentNodeForModal.node.container?.name }}</dd>
+                    }
+
+                    <dt class="col-sm-3"> {{ t('Path') }}</dt>
+                    <dd class="col-sm-9">{{ currentNodeForModal.node.container?.path }}</dd>
+
+                    <dt class="col-sm-3"> {{ t('Region managers') }}</dt>
+                    <dd class="col-sm-9">
+                        @for (user of modalRegionManagers; track $index) {
+                            <oitc-label-link
+                                [objectId]="user.id"
+                                [route]="'/users/edit'"
+                                [permissions]="'users.edit'">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </oitc-label-link>
+                            @if (!$last) {
+                                ,
+                            }
+                        }
+                        @if (modalRegionManagers.length === 0) {
+                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3"> {{ t('Managers') }}</dt>
+                    <dd class="col-sm-9">
+                        @for (user of modalManagers; track $index) {
+                            <oitc-label-link
+                                [objectId]="user.id"
+                                [route]="'/users/edit'"
+                                [permissions]="'users.edit'">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </oitc-label-link>
+                            @if (!$last) {
+                                ,
+                            }
+                        }
+                        @if (modalManagers.length === 0) {
+                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3"> {{ t('Users') }}</dt>
+                    <dd class="col-sm-9">
+                        @for (user of modalUsers; track $index) {
+                            <oitc-label-link
+                                [objectId]="user.id"
+                                [route]="'/users/edit'"
+                                [permissions]="'users.edit'">
+                                {{ user.firstname }} {{ user.lastname }}
+                            </oitc-label-link>
+                            @if (!$last) {
+                                ,
+                            }
+                        }
+                        @if (modalUsers.length === 0) {
+                            <fa-icon [icon]="['fas', 'minus']"></fa-icon>
+                        }
+                    </dd>
+
+                </dl>
+
+            }
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton color="default" class="ripple" [cModalToggle]="ocNodeDetailsModal.id">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

@@ -25,7 +25,7 @@
     </nav>
 
     <oitc-block-loader [height]="'25rem'" *ngIf="isLoading"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="!isLoading">
+    <c-card class="mb-3 d-flex flex-column h-100" *ngIf="!isLoading">
         <c-card-header>
             <h5 cCardTitle>{{ t('Edit Event Correlation:') }}
                 <small class="fw-300" *ngIf="rootElement">
@@ -67,7 +67,7 @@
                 </c-nav-item>
             </c-nav>
         </c-card-header>
-        <c-card-body>
+        <c-card-body class="d-flex flex-column h-100">
 
             <c-row>
                 <c-col [xs]="12" [md]="6">
@@ -98,9 +98,9 @@
                 </c-col>
             </c-row>
 
-            <div class="d-flex" style="height: 100vh;">
+            <div class="d-flex h-100">
                 <oitc-evc-tree-edit
-                    class="w-100 h-100 mt-3"
+                    class="flex-1 w-100 h-100 mt-3"
                     [evcId]="id"
                     [evcTree]="evcTree"
                     [stateForDisabledService]="stateForDisabledService"

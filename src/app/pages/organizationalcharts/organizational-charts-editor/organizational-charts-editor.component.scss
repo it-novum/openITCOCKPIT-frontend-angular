@@ -1,0 +1,13 @@
+@use "oc_flow";
+
+.oc-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.oc-flow {
+    width: 100%;
+    height: 100%;
+    display: block;
+}

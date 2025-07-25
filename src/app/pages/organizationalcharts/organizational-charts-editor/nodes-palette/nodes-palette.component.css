@@ -1,0 +1,58 @@
+.oc-palette {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 97px; /* 17px wider than the oc-item width */
+    min-width: 97px;
+    height: 100%;
+    border-right: 1px solid var(--cui-border-color);
+    background-color: var(--cui-card-cap-bg);
+    /*background: rgba(255, 255, 255, 0.03);*/
+    overflow: hidden;
+    overflow-y: auto;
+    z-index: 1;
+    gap: 8px;
+    padding: 8px;
+}
+
+.oc-item {
+    user-select: none;
+    position: relative;
+    display: flex;
+    width: 80px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 2px solid;
+    cursor: move;
+    z-index: 50;
+}
+
+.oc-icon {
+    margin: auto;
+    line-height: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: inherit;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* Use the same colors as the containers-map.component.ts does */
+.oc-item-tenant {
+    color: #ff4444;
+    border-color: #ff4444;
+}
+
+.oc-item-node {
+    color: #00695c;
+    border-color: #00695c;
+}
+
+.oc-item-location {
+    color: #ff8800;
+    border-color: #ff8800;
+}

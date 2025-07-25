@@ -1,0 +1,174 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['browsers', 'index']" [routerLink]="['/', 'browsers', 'index']">
+                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                    {{ t('Browser') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+    @if (!organizationalCharts) {
+        <ng-container>
+            <oitc-block-loader height="25rem"></oitc-block-loader>
+        </ng-container>
+    }
+    @if (organizationalCharts) {
+        <ng-container>
+            <oitc-query-handler-checker></oitc-query-handler-checker>
+            <c-card class="d-flex h-100">
+                <c-card-header class="my-0 py-0">
+                    <h6 cCardTitle class="my-0">
+                        <nav aria-label="breadcrumb" class="my-2">
+                            <ol class="breadcrumb my-0">
+                                <li aria-current="page" class="breadcrumb-item text-muted">
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    {{ t('Organizational charts') }}
+                                </li>
+                            </ol>
+                        </nav>
+                    </h6>
+                    <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
+                        <c-nav-item>
+                            <a [routerLink]="['/', 'browsers', 'index']"
+                               [queryParams]="{containerId: containerId}"
+                               *oitcPermission="['browsers', 'index']" class="nav-link">
+                                <fa-icon [icon]="['far', 'rectangle-list']"></fa-icon>
+                                {{ t('Container overview') }}
+                            </a>
+                        </c-nav-item>
+                        @if (organizationalCharts) {
+                            <c-nav-item>
+                                <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
+                                   [queryParams]="{containerId: containerId}"
+                                   [ngClass]="{'disabled muted': !organizationalCharts}"
+                                   *oitcPermission="['organizationalcharts', 'view']" class="nav-link active">
+                                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                    {{ t('Organizational charts') }}
+                                </a>
+                            </c-nav-item>
+                        }
+                    </c-nav>
+                </c-card-header>
+                <c-card-body class="d-flex flex-column h-100">
+                    <c-card class="mb-3 mt-3 d-flex flex-column h-100">
+                        <c-card-header>
+                            <div cCardTitle>
+                                <oitc-select
+                                    name="organizationalcharts"
+                                    id="organizationalcharts"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="organizationalchartId"
+                                    [options]="organizationalCharts"
+                                    [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                                    (ngModelChange)="onOrganizationalchartsChange()">
+                                </oitc-select>
+                            </div>
+                        </c-card-header>
+                        <c-card-body class="d-flex flex-column h-100">
+                            @if (!organizationalchartId) {
+                                <ng-container>
+                                    <oitc-block-loader height="15rem"></oitc-block-loader>
+                                </ng-container>
+                            }
+                            @if (organizationalchartId) {
+                                <c-row class="h-100">
+                                    <c-col [xs]="12" [sm]="12" [md]="4" [lg]="2">
+                                        <c-card class="d-flex h-100">
+                                            <c-card-header>
+                                                <h6 cCardTitle>
+                                                    <fa-icon [icon]="['fas', 'link']"></fa-icon>
+                                                    {{ t('Containers') }}
+                                                </h6>
+                                            </c-card-header>
+                                            <c-card-body>
+                                                <div class="ps-1 nodes-overview">
+                                                    @if (containers !== undefined) {
+                                                        @for (container of containers; track $index) {
+                                                            <div class="mb-1 py-1"
+                                                                 [ngClass]="{'selected-container-organizational-chart': container.key == containerId}">
+                                                                @if (container.value.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
+                                                                    <fa-icon [icon]="['fas', 'globe']"
+                                                                             class="pe-1"></fa-icon>
+                                                                }
+                                                                @if (container.value.containertype_id == ContainerTypesEnum.CT_TENANT) {
+                                                                    <fa-icon [icon]="['fas', 'home']"
+                                                                             class="pe-1"></fa-icon>
+                                                                }
+                                                                @if (container.value.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                                                    <fa-icon
+                                                                        [icon]="['fas', 'location-arrow']"
+                                                                        class="pe-1"></fa-icon>
+                                                                }
+                                                                @if (container.value.containertype_id == ContainerTypesEnum.CT_NODE) {
+                                                                    <fa-icon [icon]="['fas', 'link']"
+                                                                             class="pe-1"></fa-icon>
+                                                                }
+                                                                <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
+                                                                   [queryParams]="{containerId: container.key}"
+                                                                   class="ms-1">
+                                                                    {{ container.value.name }}
+                                                                </a>
+                                                            </div>
+                                                            @if (containers.length == 0) {
+                                                                <div>
+                                                                    <oitc-no-records></oitc-no-records>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                            </c-card-body>
+                                        </c-card>
+                                    </c-col>
+                                    <c-col [xs]="12" [sm]="12" [md]="8" [lg]="10">
+                                        <c-card class="d-flex h-100">
+                                            <c-card-header>
+                                                @if (organizationalChart) {
+                                                    <h6 cCardTitle>
+                                                        <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                                        {{ organizationalChart.name }}
+                                                    </h6>
+                                                }
+                                            </c-card-header>
+                                            <c-card-body>
+
+                                                @if (organizationalChart) {
+                                                    <oitc-organizational-charts-viewer
+                                                        class="flex-1"
+                                                        [(nodeTree)]="organizationalChart.organizational_chart_nodes"
+                                                        [(connections)]="organizationalChart.organizational_chart_connections">
+
+                                                    </oitc-organizational-charts-viewer>
+                                                }
+
+                                            </c-card-body>
+                                        </c-card>
+                                    </c-col>
+                                </c-row>
+                            }
+
+                        </c-card-body>
+                    </c-card>
+
+
+                </c-card-body>
+                <c-card-footer>
+
+                </c-card-footer>
+            </c-card>
+        </ng-container>
+    }
+</ng-container>

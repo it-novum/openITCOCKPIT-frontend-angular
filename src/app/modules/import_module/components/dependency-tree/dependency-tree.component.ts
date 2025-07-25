@@ -38,7 +38,7 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data/peer';
-import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
+import { StatusSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { HostSummaryComponent } from './host-summary/host-summary.component';
 import { NotInMonitoringComponent } from './not-in-monitoring/not-in-monitoring.component';
 import { HostGroupSummaryComponent } from './host-group-summary/host-group-summary.component';
@@ -122,7 +122,7 @@ export class DependencyTreeComponent implements OnInit, OnChanges, OnDestroy {
     public toastPercentage: number = 0;
 
     public hostSummaryState?: SummaryState;
-    public hostgroupSummeryState?: HostgroupSummaryState;
+    public hostgroupSummeryState?: StatusSummaryState;
 
     private isFullscreen: boolean = false;
     private subscriptions: Subscription = new Subscription();

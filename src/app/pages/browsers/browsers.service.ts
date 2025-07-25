@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
-import { BrowsersIndexResponse, StatuscountResponse } from './browsers.interface';
+import { BrowsersIndexResponse, StatuscountResponse, StatuscountResponseExtended } from './browsers.interface';
 import { ROOT_CONTAINER } from '../changelogs/object-types.enum';
 
 @Injectable({
@@ -38,6 +38,29 @@ export class BrowsersService {
         }
 
         return this.http.get<StatuscountResponse>(`${proxyPath}/angular/statuscount.json`, {
+            params: params
+        }).pipe(
+            map(data => {
+                return data
+            })
+        );
+    }
+
+    public getExtendedStatusCountsByContainer(containerIds: number[], recursive?: boolean): Observable<StatuscountResponseExtended> {
+        const proxyPath = this.proxyPath;
+
+        let params: any = {
+            angular: true,
+            'containerIds[]': containerIds
+        };
+
+        if (recursive !== undefined) {
+            params['recursive'] = recursive;
+        }
+
+        params['extended'] = true;
+
+        return this.http.get<StatuscountResponseExtended>(`${proxyPath}/angular/statuscount.json`, {
             params: params
         }).pipe(
             map(data => {

@@ -130,7 +130,7 @@ const GROUP_HEIGHT = 50;
         ButtonGroupComponent
     ],
     templateUrl: './evc-tree-edit.component.html',
-    styleUrl: './evc-tree-edit.component.css',
+    styleUrl: './evc-tree-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EvcTreeEditComponent implements OnDestroy {

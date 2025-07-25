@@ -25,7 +25,7 @@
     </nav>
 
     <oitc-block-loader [height]="'25rem'" *ngIf="!evcTree || !rootElement"></oitc-block-loader>
-    <c-card class="mb-3" *ngIf="evcTree && rootElement">
+    <c-card class="mb-3 d-flex flex-column h-100" *ngIf="evcTree && rootElement">
         <c-card-header>
             <h5 cCardTitle>{{ t('Event Correlation:') }}
                 <small class="fw-300">
@@ -94,7 +94,7 @@
                 </c-nav-item>
             </c-nav>
         </c-card-header>
-        <c-card-body>
+        <c-card-body class="d-flex flex-column h-100">
 
             <c-row>
                 <c-col [xs]="12" [md]="6">
@@ -155,9 +155,9 @@
                 </c-col>
             </c-row>
 
-            <div class="d-flex" style="height: 100vh;" *ngIf="show">
+            <div class="d-flex h-100" *ngIf="show">
                 <oitc-evc-tree
-                    class="w-100 h-100"
+                    class="flex-1 w-100 h-100"
                     [evcId]="id"
                     [evcTree]="evcTree"
                     [downtimedServices]="downtimedServices"

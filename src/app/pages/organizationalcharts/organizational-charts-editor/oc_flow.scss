@@ -1,0 +1,303 @@
+// https://flow.foblex.com/docs/get-started
+// https://github.com/Foblex/f-flow-example/blob/main/projects/cc-call-configuration/src/lib/components/editor/node/workflow-node.component.scss
+// MIT license
+
+:host {
+    --background-element-color: rgba(0, 0, 0, 0.1);
+    --selection-area-color: rgba(100, 108, 255, 0.14);
+    --selection-area-border-color: #248EFF;
+    --disabled-color: #e2e2e2;
+    --node-background-color: #ffffff;
+    --node-border-radius: 4px;
+    --node-border-color: rgba(60, 60, 67, 0.36);
+    --node-selected-border-color: #3451b2;
+    --node-color: rgba(60, 60, 67, 0.78);
+    --node-shadow-color: rgb(168, 173, 189);
+    --node-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --connection-color: #a8adbd;
+    --connection-selection-color: #ffffff73;
+    --snap-connection-color: rgba(60, 60, 67, 0.38);
+    --connection-gradient-1: #b8272c;
+    --connection-gradient-2: #30a46c;
+    --outlet-color: #3451b2;
+    --input-output-color: rgba(60, 60, 67, 0.78);
+    --minimap-node-color: rgba(60, 60, 67);
+    --minimap-node-selected-color: #3451b2;
+    --minimap-view-color: rgba(100, 108, 255, 0.14);
+
+    --form-field-text-color: var(--node-color);
+    --form-field-background: var(--minimap-view-color);
+    --form-field-panel-shadow: var(--shadow-4);
+    --form-field-panel-background: var(--node-background-color);
+    --form-field-active-color: var(--minimap-node-selected-color);
+}
+
+body.dark-theme :host {
+    --background-element-color: rgba(255, 255, 255, 0.1);
+    --selection-area-color: rgba(100, 108, 255, 0.16);
+    --selection-area-border-color: #248EFF;
+    --disabled-color: #2c2c2e;
+    --node-background-color: #121a28;
+    --node-border-radius: 4px;
+    --node-border-color: rgba(235, 235, 245, 0.38);
+    --node-selected-border-color: #a8b1ff;
+    --node-color: rgba(235, 235, 245, 0.6);
+    --node-shadow-color: rgb(73, 75, 81);
+    --node-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --connection-color: #9a9ba6;
+    --connection-selection-color: #21263173;
+    --snap-connection-color: rgba(235, 235, 245, 0.2);
+    --connection-gradient-1: #f66f81;
+    --connection-gradient-2: #298459;
+    --outlet-color: #a8b1ff;
+    --input-output-color: rgba(235, 235, 245, 0.6);
+    --minimap-node-color: rgba(255, 255, 245, 0.86);
+    --minimap-node-selected-color: #a8b1ff;
+    --minimap-view-color: rgba(100, 108, 255, 0.16);
+}
+
+::ng-deep .f-flow {
+
+    //height: 100vh !important;
+
+    /*.f-flow {
+        height: 100vh !important;
+    }*/
+
+    .f-selection-area {
+        background-color: var(--selection-area-color);
+        border: 1px dashed var(--selection-area-border-color);
+    }
+
+
+    .f-connection-center {
+        background-color: var(--node-background-color);
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+        border: 1px solid var(--node-border-color);
+        font-size: 10px;
+        line-height: 10px;
+    }
+
+    .f-connection {
+
+
+        #normal_end {
+            fill: var(--connection-color);
+        }
+
+        #selected_end {
+            fill: var(--cui-primary);
+        }
+
+        .f-connection-drag-handle {
+            fill: transparent;
+        }
+
+        .f-connection-selection {
+            stroke: var(--connection-selection-color);
+            stroke-width: 20px;
+            fill: none;
+        }
+
+        .f-connection-path {
+            stroke-width: 3px;
+            stroke: var(--connection-color);
+            fill: none;
+        }
+
+        .f-connection-text, .f-connection-center {
+            fill: var(--connection-color);
+            color: var(--connection-color);
+        }
+
+        &.f-snap-connection {
+            .f-connection-path {
+                stroke: var(--snap-connection-color);
+            }
+        }
+
+        &.f-selected {
+            .f-connection-path {
+                stroke: var(--cui-primary);
+            }
+
+            .f-connection-text {
+                fill: var(--cui-primary);
+            }
+
+            .f-connection-selection {
+                stroke: var(--cui-card-bg);
+            }
+        }
+    }
+
+
+    .f-background {
+        line {
+            stroke: var(--background-element-color);
+        }
+
+        circle {
+            fill: var(--background-element-color);
+        }
+    }
+
+
+    .f-line-alignment {
+        .f-line {
+            background-color: var(--connection-color);
+        }
+    }
+
+
+    .f-minimap {
+        background-color: var(--cui-card-cap-bg);
+        top: 16px;
+        right: 16px;
+        width: 120px;
+        height: 120px;
+
+        .f-minimap-node {
+            fill: var(--minimap-node-color);
+
+            &.f-selected {
+                fill: var(--minimap-node-selected-color);
+            }
+        }
+
+        .f-minimap-view {
+            fill: var(--minimap-view-color)
+        }
+    }
+
+
+    .f-node {
+        color: var(--node-color);
+        /*text-align: center;*/
+        background: var(--node-background-color);
+        border-radius: var(--node-border-radius);
+
+        border: 1px solid var(--node-border-color);
+        border-top: 4px solid transparent;
+
+        &:active {
+            box-shadow: var(--node-shadow);
+        }
+
+        &.f-selected {
+            box-shadow: 0 0 20px var(--node-shadow-color);
+        }
+    }
+
+    .oc-node-body {
+        width: 200px;
+        margin: 4px;
+    }
+
+    .oc-tenant-node {
+        border-top-color: rgb(255, 133, 155);
+    }
+
+    .oc-location-node {
+        border-top-color: rgb(255, 194, 128);
+    }
+
+    .oc-node-node {
+        border-top-color: rgb(67, 186, 171);
+    }
+
+    .oc-node-error {
+        border-color: var(--cui-form-invalid-border-color);
+        box-shadow: 0 0 20px var(--cui-form-invalid-border-color);
+    }
+
+    .oc-node-output {
+        margin-bottom: -10px;
+    }
+
+    @mixin connectors {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 0.2px solid var(--node-border-color);
+        background-color: var(--node-background-color);
+        &.left {
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        &.right {
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        &.top {
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        &.top-left {
+            top: -8px;
+            left: -8px;
+        }
+        &.top-right {
+            top: -8px;
+            right: -8px;
+        }
+        &.bottom {
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        &.bottom-left {
+            bottom: -8px;
+            left: -8px;
+        }
+        &.bottom-right {
+            bottom: -8px;
+            right: -8px;
+        }
+    }
+
+    .f-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        position: absolute;
+        right: 16px;
+        top: 16px;
+
+        button {
+            font-weight: 500;
+            border: none;
+            border-radius: 2px;
+            padding: 4px 8px;
+            line-height: normal;
+        }
+    }
+
+    .animated :not(circle) {
+        stroke-dashoffset: 0;
+        stroke-dasharray: 5, 5;
+        animation: dash 5s linear infinite;
+    }
+
+    .f-flow {
+        circle {
+            stroke-dashoffset: 0;
+            stroke-dasharray: 0, 0;
+            fill: var(--connection-color);
+        }
+    }
+
+    @keyframes dash {
+        to {
+            stroke-dashoffset: 50;
+        }
+    }
+}

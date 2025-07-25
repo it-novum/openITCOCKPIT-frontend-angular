@@ -1,0 +1,294 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li class="breadcrumb-item">
+                <a *oitcPermission="['organizationalcharts', 'index']"
+                   [routerLink]="['/', 'organizationalcharts', 'index']">
+                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                    {{ t('Organizational charts') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Organizational charts') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="loadOrganizationalCharts()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button *oitcPermission="['organizationalcharts', 'add']"
+                            [routerLink]="['/', 'organizationalcharts', 'add']"
+                            cButton
+                            class="ripple"
+                            color="success"
+                            size="xs">
+                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        {{ t('New') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[OrganizationalCharts.name]']"
+                                       [placeholder]="'Filter by name' | transloco"
+                                       aria-label="Organizational chart name"
+                                       cFormControl
+                                       name="OrganizationalCharts.name"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[OrganizationalCharts.description]']"
+                                       [placeholder]="'Filter by description' | transloco"
+                                       aria-label="Organizational charts description"
+                                       cFormControl
+                                       name="OrganizationalCharts.description"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            <oitc-table-loader *ngIf="!organizationalcharts"></oitc-table-loader>
+            <table *ngIf="organizationalcharts" bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th class="width-50 text-center" scope="col">
+                        <fa-icon [icon]="['fas', 'square-check']"></fa-icon>
+                    </th>
+                    <th scope="col" mat-sort-header="OrganizationalCharts.name">
+                        {{ t('Name') }}
+                    </th>
+                    <th scope="col" mat-sort-header="OrganizationalCharts.description">
+                        {{ t('Description') }}
+                    </th>
+                    <th class="width-50 text-center">
+                        <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+                    </th>
+                    <th scope="col">
+                        {{ t('Containers') }}
+                    </th>
+                    <th class="text-center width-50" scope="col">
+                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let organizationalchart of organizationalcharts.all_organizationalcharts">
+                    <td class="text-center">
+                        <oitc-item-select
+                            *oitcPermission="['organizationalcharts', 'delete']"
+                            [disabled]="!Boolean(organizationalchart.allowEdit)"
+                            [item]="organizationalchart"></oitc-item-select>
+                    </td>
+                    <td>
+                        @if (( this.PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async ) && organizationalchart.allowView) {
+                            <a [routerLink]="['/', 'organizationalcharts', 'view', organizationalchart.id]">
+                                {{ organizationalchart.name }}
+                            </a>
+                        } @else {
+                            {{ organizationalchart.name }}
+                        }
+                    </td>
+                    <td>{{ organizationalchart.description }}</td>
+                    <td class="text-center">
+                        @if (organizationalchart.allowView) {
+                            @if (organizationalchart.organizational_chart_nodes !== undefined) {
+                                {{ organizationalchart.organizational_chart_nodes.length }}
+                            }
+
+                        } @else {
+                            <fa-icon [icon]="['fas', 'low-vision']"
+                                     [cTooltip]="'Restricted view' | transloco" cTooltipPlacement="right"></fa-icon>
+                        }
+                    </td>
+                    <td>
+                        <ul class="mb-0 ms-1 ps-2">
+                            @for (container_node of organizationalchart.organizational_chart_nodes; track $index) {
+                                @if (organizationalchart.allowView && container_node.container) {
+                                    <li>
+                                        @if (PermissionsService.hasPermissionObservable(['organizationalcharts', 'view'])|async) {
+                                            <a [routerLink]="['/', 'organizationalcharts', 'browserView']"
+                                               [queryParams]="{'containerId': container_node.container.id}">
+                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
+                                                    <fa-icon [icon]="['fas', 'globe']" class="pe-1"></fa-icon>
+                                                }
+                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_TENANT) {
+                                                    <fa-icon [icon]="['fas', 'home']" class="pe-1"></fa-icon>
+                                                }
+                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                                    <fa-icon [icon]="['fas', 'location-arrow']" class="pe-1"></fa-icon>
+                                                }
+                                                @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
+                                                    <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
+                                                }
+                                                {{ container_node.container.name }}
+                                            </a>
+                                        } @else {
+                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_GLOBAL) {
+                                                <fa-icon [icon]="['fas', 'globe']" class="pe-1"></fa-icon>
+                                            }
+                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_TENANT) {
+                                                <fa-icon [icon]="['fas', 'home']" class="pe-1"></fa-icon>
+                                            }
+                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_LOCATION) {
+                                                <fa-icon [icon]="['fas', 'location-arrow']" class="pe-1"></fa-icon>
+                                            }
+                                            @if (container_node.container.containertype_id == ContainerTypesEnum.CT_NODE) {
+                                                <fa-icon [icon]="['fas', 'link']" class="pe-1"></fa-icon>
+                                            }
+                                            {{ container_node.container.name }}
+                                        }
+
+
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+                    </td>
+                    <td class="width-50">
+                        <oitc-actions-button [permission]="'organizationalcharts.edit'"
+                                             [url]="'/organizationalcharts/edit/' + organizationalchart.id"
+                                             [allowEdit]="organizationalchart.allowEdit">
+                            <oitc-actions-button-element [permission]="'organizationalcharts.edit'"
+                                                         [allow]="organizationalchart.allowEdit"
+                                                         [url]="'/organizationalcharts/edit/' + organizationalchart.id">
+                                <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                                {{ t('Edit') }}
+                            </oitc-actions-button-element>
+
+                            <oitc-actions-button-element [permission]="'organizationalcharts.view'"
+                                                         [url]="'/organizationalcharts/view/'+organizationalchart.id"
+                                                         [allow]="organizationalchart.allowView">
+                                <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
+                                {{ t('View') }}
+                            </oitc-actions-button-element>
+
+
+                            @if (organizationalchart.allowEdit) {
+                                <li cDropdownDivider></li>
+                                <oitc-actions-button-element (click)="toggleDeleteAllModal(organizationalchart)"
+                                                             [permission]="'organizationalcharts.delete'"
+                                                             [allow]="organizationalchart.allowEdit">
+                                    <span class="text-danger">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </oitc-actions-button-element>
+                            }
+                        </oitc-actions-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <oitc-no-records
+                *ngIf="organizationalcharts && organizationalcharts.all_organizationalcharts.length === 0"></oitc-no-records>
+            <ng-container *ngIf="organizationalcharts && organizationalcharts.all_organizationalcharts">
+                <c-container class="bg-secondary bg-opacity-10 mb-3 py-2 rounded-bottom border border-top-0"
+                             [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-select-all
+                                [itemsCount]="organizationalcharts.all_organizationalcharts.length"></oitc-select-all>
+                        </c-col>
+                        <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3" *oitcPermission="['organizationalcharts', 'delete']">
+                            <div class="btn-group d-flex flex-row" role="group">
+                                <button (click)="toggleDeleteAllModal()"
+                                        class="btn btn-outline-danger col-3 border-0"
+                                        type="button">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    {{ t('Delete selected') }}
+                                </button>
+                            </div>
+                        </c-col>
+                    </c-row>
+                </c-container>
+
+                <c-container
+                    [fluid]="true">
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                *ngIf="organizationalcharts"
+                                [paginateOrScroll]="organizationalcharts"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            </ng-container>
+        </c-card-body>
+        <c-card-footer>
+            &nbsp;
+        </c-card-footer>
+    </c-card>
+</ng-container>
+
+<oitc-delete-all-modal (completed)="onMassActionComplete($event)" [items]="selectedItems"></oitc-delete-all-modal>

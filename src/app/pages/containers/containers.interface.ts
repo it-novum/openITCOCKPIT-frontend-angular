@@ -25,6 +25,10 @@ export interface ContainerParentCanBeNull {
 export interface ContainerEntity extends Container {
 }
 
+export interface ContainerWithPath extends Container {
+    path?: string
+}
+
 export interface ContainerWithHostJoinData extends Container {
     id: number
     host_id: number

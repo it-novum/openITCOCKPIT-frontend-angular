@@ -14,7 +14,7 @@ import {
     ExternalSystemsIndexRoot,
     IdoitObjectTypeResult
 } from './external-systems.interface';
-import { HostgroupSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
+import { StatusSummaryState, SummaryState } from '../../../../pages/hosts/summary_state.interface';
 import { ModalService } from '@coreui/angular';
 import {
     GenericIdResponse,
@@ -86,10 +86,10 @@ export class ExternalSystemsService {
         );
     }
 
-    public getHostgroupSummary(hostgroupId: number): Observable<HostgroupSummaryState> {
+    public getHostgroupSummary(hostgroupId: number): Observable<StatusSummaryState> {
         const proxyPath = this.proxyPath;
         return this.http.get<{
-            summaryState: HostgroupSummaryState
+            summaryState: StatusSummaryState
         }>(`${proxyPath}/import_module/ExternalSystems/hostgroupsummary/${hostgroupId}.json`, {
             params: {
                 angular: true

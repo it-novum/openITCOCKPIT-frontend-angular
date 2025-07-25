@@ -1,0 +1,250 @@
+<ng-container *transloco="let t">
+    <div class="oc-node-body cursor-move" fDragHandle [style.min-height.px]="224">
+        <div>
+            <div class="font-xx-small">
+                <div class="d-flex mx-0 pt-1" [ngClass]="{'bg-primary':statusCounts?.cumulativeHoststatus ===-1,
+                       'bg-success':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1),
+                       'bg-warning':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1),
+                       'bg-danger':(statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3) || (statusCounts?.cumulativeServicestatus === 2),
+                       'bg-secondary':statusCounts?.cumulativeHoststatus === 2 || (statusCounts?.cumulativeServicestatus === 3)}">
+                    @if (nodeObj && nodeObj.node.container_id > 0) {
+                        <div class="ps-2 flex-1 text-white"
+                             [ngClass]="{'text-dark-important':statusCounts?.cumulativeHoststatus === 0 && (statusCounts?.cumulativeServicestatus ===1)}">
+                            <div class="p-0 mb-1 word-break" [cTooltip]="containerPath">
+                                @switch (nodeObj.node.containertype_id) {
+                                    @case (ContainerTypesEnum.CT_TENANT) {
+                                        <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                                    }
+                                    @case (ContainerTypesEnum.CT_LOCATION) {
+                                        <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                                    }
+                                    @case (ContainerTypesEnum.CT_NODE) {
+                                        <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                                    }
+                                }
+                                {{ containerName }}
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="ps-2 flex-1">
+                            <div class="p-0 mb-1 word-break">
+                                <fa-icon [icon]="['fas', 'ellipsis']"></fa-icon>
+                                {{ containerName }}
+                            </div>
+                        </div>
+                    }
+
+                    <div class="pb-1 me-1">
+                        @if (nodeObj) {
+                            <button cButton class="ripple px-1 font-xs" [size]="'xs'"
+                                    (click)="editNode.emit(nodeObj.fNodeId)"
+                                    [color]="'default'">
+                                <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                {{ t('Edit') }}
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                @if (statusCounts?.cumulativeHoststatus === -1) {
+                    <c-row class="m-0 bg-primary text-white">
+                        <c-col class="ps-2">
+                            <div class="py-1">
+                                <fa-icon [icon]="['fas', 'circle-info']" class="font-md"></fa-icon>
+                                {{ t('No hosts detected') }}
+                            </div>
+                        </c-col>
+                    </c-row>
+                }
+
+                @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 0 || statusCounts?.cumulativeServicestatus === -1 )) {
+                    <c-row class="m-0 bg-success text-white bg-gradient">
+                        <c-col class="ps-2">
+                            <div class="py-1">
+                                <fa-icon [icon]="['fas', 'circle-check']" class="font-md"></fa-icon>
+                                {{ t('No problems detected') }}
+                            </div>
+                        </c-col>
+                    </c-row>
+                }
+                @if (statusCounts?.cumulativeHoststatus === 0 && ( statusCounts?.cumulativeServicestatus === 1 )) {
+                    <c-row class="m-0 bg-warning bg-gradient text-dark-important">
+                        <c-col class="ps-2">
+                            <div class="py-1">
+                                <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
+                                {{ t('Warnings detected') }}
+                            </div>
+                        </c-col>
+                    </c-row>
+                }
+
+                @if (( statusCounts?.cumulativeHoststatus === 1 && statusCounts?.cumulativeServicestatus !== 3 ) || statusCounts?.cumulativeServicestatus === 2) {
+                    <c-row class="m-0 bg-danger text-white bg-gradient">
+                        <c-col class="ps-2">
+                            <div class="py-1">
+                                <fa-icon [icon]="['fas', 'triangle-exclamation']" class="font-md"></fa-icon>
+                                {{ t('Problems detected') }}
+                            </div>
+                        </c-col>
+                    </c-row>
+                }
+                @if (statusCounts?.cumulativeHoststatus === 2 || ( statusCounts?.cumulativeServicestatus === 3 )) {
+                    <c-row class="m-0 bg-secondary text-white bg-gradient">
+                        <c-col class="ps-2">
+                            <div class="py-1">
+                                <fa-icon [icon]="['fas', 'circle-question']" class="font-md"></fa-icon>
+                                {{ t('Undetermined problems') }}
+                            </div>
+                        </c-col>
+                    </c-row>
+                }
+            </div>
+        </div>
+
+        @if (nodeObj && nodeObj.node) {
+            <div class="font-xs mt-2 small-text">
+                {{ t('Recursive lookup is') }}
+                <span class="text-decoration-underline">
+                    @if (nodeObj.node.recursive) {
+                        {{ t('enabled') }}
+                    } @else {
+                        {{ t('disabled') }}
+                    }
+                </span>
+            </div>
+            <hr class="my-1 fieldset-legend-border-bottom-thin">
+
+            <div>
+                @if (isLoading && nodeObj.node.container_id > 0) {
+                    <oitc-block-loader [height]="'191px'"></oitc-block-loader>
+                } @else {
+                    @if (statusCounts) {
+                        <c-row class="small-text">
+                            <c-col [xs]="12">
+                                <h6 cCardTitle class="small">
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    {{ t('Host status overview') }}
+                                    @if (statusCounts.unhandledHostsSum > 0) {
+                                        <oitc-badge-outline color="danger" class="me-1"
+                                                            [cTooltip]="'Unhandled problems'|transloco">
+                                            {{ t('Unhandled') }}: {{ statusCounts.unhandledHostsSum }}
+                                        </oitc-badge-outline>
+                                    }
+                                </h6>
+                            </c-col>
+                            <c-row>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.hoststatusCount[0] === 0}"
+                                         class="border-start border-start-5 border-start-success py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.hoststatusCount[0] }}
+                                            ({{ statusCounts.hoststatusCountPercentage[0] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.hoststatusCount[1] === 0}"
+                                         class="border-start border-start-5 border-start-danger py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.hoststatusCount[1] }}
+                                            ( {{ statusCounts.hoststatusCountPercentage[1] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.hoststatusCount[2] === 0}"
+                                         class="border-start border-start-5 border-start-secondary py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.hoststatusCount[2] }}
+                                            ({{ statusCounts.hoststatusCountPercentage[2] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                            <c-row>
+                                <c-col class="text-end bold pt-0 pe-0">
+                                    {{ t('Total') }}: {{ statusCounts.hoststatusSum }}
+                                </c-col>
+                            </c-row>
+                        </c-row>
+                        <c-row class="small-text">
+                            <c-col [xs]="12">
+                                <h6 cCardTitle class="small">
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    {{ t('Service status overview') }}
+                                    @if (statusCounts.unhandledServicesSum > 0) {
+                                        <oitc-badge-outline color="danger" class="me-1"
+                                                            [cTooltip]="'Unhandled problems'|transloco">
+                                            {{ t('Unhandled') }}: {{ statusCounts.unhandledServicesSum }}
+                                        </oitc-badge-outline>
+                                    }
+                                </h6>
+                            </c-col>
+                            <c-row>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[0] === 0}"
+                                         class="border-start border-start-5 border-start-success py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[0] }}
+                                            ({{ statusCounts.servicestatusCountPercentage[0] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[1] === 0}"
+                                         class="border-start border-start-5 border-start-warning py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[1] }}
+                                            ({{ statusCounts.servicestatusCountPercentage[1] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[2] === 0}"
+                                         class="border-start border-start-5 border-start-danger py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[2] }}
+                                            ( {{ statusCounts.servicestatusCountPercentage[2] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                                <c-col [xs]="12">
+                                    <div [ngClass]="{'opacity-25':statusCounts.servicestatusCount[3] === 0}"
+                                         class="border-start border-start-5 border-start-secondary py-0 px-1 font-xs">
+                                        <div class="text-body-secondary">
+                                            {{ statusCounts.servicestatusCount[3] }}
+                                            ( {{ statusCounts.servicestatusCountPercentage[3] }}%)
+                                        </div>
+                                    </div>
+                                </c-col>
+                            </c-row>
+                            <c-row>
+                                <c-col class="text-end bold pt-0 pe-0">
+                                    {{ t('Total') }}: {{ statusCounts.servicestatusSum }}
+                                </c-col>
+                            </c-row>
+                        </c-row>
+                    }
+                }
+            </div>
+        }
+    </div>
+
+
+    <div class="output-item text-center">
+        @if (nodeObj) {
+            <div fNodeOutput
+                 class="oc-node-output"
+                 [fOutputId]="String(nodeObj.node.id)"
+                 [fOutputMultiple]="true"
+                 [isSelfConnectable]="false">
+                @if (hasConnection) {
+                    <fa-icon [icon]="['fas', 'square-xmark']" class="text-danger"
+                             (click)="onDeleteConnection()"></fa-icon>
+                } @else {
+                    <fa-icon [icon]="['far', 'square']"></fa-icon>
+                }
+            </div>
+        }
+    </div>
+</ng-container>

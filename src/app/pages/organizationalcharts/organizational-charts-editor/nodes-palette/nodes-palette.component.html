@@ -1,0 +1,27 @@
+<ng-container *transloco="let t">
+    <div class="oc-palette">
+        <div class="oc-item oc-item-tenant" fExternalItem [fData]="ContainerTypesEnum.CT_TENANT">
+            <div class="oc-icon">
+                <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                {{ t('Tenant') }}
+            </div>
+        </div>
+
+        <div class="oc-item oc-item-location" fExternalItem [fData]="ContainerTypesEnum.CT_LOCATION">
+            <div class="oc-icon">
+                <fa-icon [icon]="['fas', 'location-arrow']"></fa-icon>
+                {{ t('Location') }}
+            </div>
+        </div>
+
+        <div class="oc-item oc-item-node" fExternalItem [fData]="ContainerTypesEnum.CT_NODE">
+            <div class="oc-icon">
+                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                {{ t('Node') }}
+            </div>
+        </div>
+
+    </div>
+
+</ng-container>
+

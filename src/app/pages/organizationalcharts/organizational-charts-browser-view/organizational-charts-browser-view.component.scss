@@ -1,0 +1,17 @@
+@use "sass:color";
+@use "../../../../assets/coreui/_variables.scss" as cui-variables;
+
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.selected-container-organizational-chart {
+    border-right: 2px solid var(--cui-primary);
+    box-shadow: rgba(cui-variables.$primary, 0.3) 5px 0px 10px 0px;
+    background: var(--cui-card-cap-bg);
+    color: var(--cui-body-color);
+}

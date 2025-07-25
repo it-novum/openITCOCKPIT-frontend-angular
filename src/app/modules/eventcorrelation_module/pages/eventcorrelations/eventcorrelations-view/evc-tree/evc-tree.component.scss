@@ -1,0 +1,10 @@
+@use "../../../../assets/evc_flow";
+
+/*
+@use "../../../../../../../assets/coreui/_variables.scss" as cui-variables;
+@use "../../../../assets/eventcorrelation_module.scss" with (
+    $primary: cui-variables.$primary,
+);
+*/
+
+@use "../../../../assets/eventcorrelation_module.scss";

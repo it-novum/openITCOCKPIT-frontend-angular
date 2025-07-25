@@ -1,0 +1,249 @@
+<div class="oc-wrapper">
+    <oitc-nodes-palette></oitc-nodes-palette>
+    <f-flow fDraggable class="oc-flow"
+            (fLoaded)="onInitialized()"
+            (fReassignConnection)="onReassignConnection($event)"
+            (fCreateConnection)="onConnectionAdded($event)"
+            (fCreateNode)="onNodeAdded($event)">
+
+        <f-background>
+            <f-circle-pattern></f-circle-pattern>
+        </f-background>
+
+        <f-line-alignment></f-line-alignment>
+        <f-canvas fZoom>
+
+
+            <f-connection-for-create [fType]="EFConnectionType.SEGMENT">
+                <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5" [width]="5"
+                     [refX]="4"
+                     [refY]="2.5">
+                    <path d="M0,0L700,350L0,700L150,350z"/>
+                </svg>
+            </f-connection-for-create>
+
+            @for (node of nodes; track node.fNodeId; ) {
+                <oitc-oc-node [node]="node"
+                              [ngClass]="{'oc-tenant-node': node.node.containertype_id === ContainerTypesEnum.CT_TENANT,'oc-location-node': node.node.containertype_id === ContainerTypesEnum.CT_LOCATION,'oc-node-node': node.node.containertype_id === ContainerTypesEnum.CT_NODE, 'oc-node-error': (nodeValidationErrors[$index] || false)}"
+                              [fNodeId]="String(node.node.id)"
+                              fNode
+                              fNodeInput
+                              [fInputId]="String(node.node.id)"
+                              [fInputMultiple]="true"
+                              [fNodePosition]="node.position"
+                              [fInputConnectableSide]="EFConnectableSide.TOP"
+                              (fNodePositionChange)="onNodePositionChanged($event, node)"
+                              [connectionsInput]="connections()"
+                              (deleteConnection)="onRemoveConnection($event)"
+                              (editNode)="onEditNode($event)"
+                              [containers]="modalContainer"
+                              [containerType]="node.node.containertype_id">
+                </oitc-oc-node>
+            }
+
+            @for (connection of connections(); track connection.id) {
+                <f-connection
+                    [fOffset]="20"
+                    [fBehavior]="EFConnectionBehavior.FIXED"
+                    [fType]="EFConnectionType.SEGMENT"
+                    [fConnectionId]="String(connection.id)"
+                    [fOutputId]="String(connection.organizational_chart_output_node_id)"
+                    [fInputId]="String(connection.organizational_chart_input_node_id)">
+
+                    <svg id="normal_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.END" [height]="5"
+                         [width]="5"
+                         [refX]="4" [refY]="2.5">
+                        <path d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+
+                    <svg id="selected_end" viewBox="0 0 700 700" fMarker [type]="eMarkerType.SELECTED_END"
+                         [height]="5"
+                         [width]="5" [refX]="4" [refY]="2.5">
+                        <path d="M0,0L700,350L0,700L150,350z"/>
+                    </svg>
+
+                </f-connection>
+            }
+        </f-canvas>
+
+        <f-selection-area></f-selection-area>
+
+        <!-- Wrap this component in a card to make sure that the CoreUi CSS variables for the minimap are applied -->
+        <f-minimap [fMinSize]="1000"></f-minimap>
+
+    </f-flow>
+</div>
+
+<ng-container *transloco="let t">
+
+    <!-- Edit Node Modal -->
+    <c-modal #ocNodeEditModal
+             [keyboard]="true"
+             [id]="'ocNodeEditModal'"
+             [size]="'lg'">
+        <c-modal-header>
+            <h5 cModalTitle>
+                {{ t('Node information') }}
+            </h5>
+            <button [cModalToggle]="ocNodeEditModal.id" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+
+
+            @if (currentNodeForModal) {
+
+                @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_TENANT) {
+                    <div class="mb-3">
+                        <label cLabel for="modalTenantSelect">
+                            {{ t('Tenant') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="modalTenantSelect"
+                            id="modalTenantSelect"
+                            optionValue="key"
+                            optionLabel="path"
+                            [(ngModel)]="currentNodeForModal.node.container_id"
+                            [options]="modalTenants"
+                            [appendTo]="''"
+                            (onChange)="onModalContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                }
+
+                @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_LOCATION) {
+                    <div class="mb-3">
+                        <label cLabel for="modalLocationSelect">
+                            {{ t('Location') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="modalLocationSelect"
+                            id="modalLocationSelect"
+                            optionValue="key"
+                            optionLabel="path"
+                            [(ngModel)]="currentNodeForModal.node.container_id"
+                            [options]="modalLocations"
+                            [appendTo]="''"
+                            (onChange)="onModalContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                }
+
+                @if (currentNodeForModal.node.containertype_id === ContainerTypesEnum.CT_NODE) {
+                    <div class="mb-3">
+                        <label cLabel for="modalNodeSelect">
+                            {{ t('Node') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+
+                        <oitc-select
+                            name="modalNodeSelect"
+                            id="modalNodeSelect"
+                            optionValue="key"
+                            optionLabel="path"
+                            [(ngModel)]="currentNodeForModal.node.container_id"
+                            [options]="modalNodes"
+                            [appendTo]="''"
+                            (onChange)="onModalContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
+                        </oitc-select>
+                        <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <c-form-check>
+                        <input
+                            cFormCheckInput
+                            class="checkbox-lg checkbox-primary"
+                            name="currentNodeForModal.node.recursive"
+                            id="currentNodeForModal.node.recursive"
+                            type="checkbox"
+                            [(ngModel)]="currentNodeForModal.node.recursive"
+                            oitcFormError [errors]="errors" errorField="recursive"/>
+                        <oitc-form-feedback [errors]="errors" errorField="recursive"></oitc-form-feedback>
+                        <label cFormCheckLabel class="ms-1 mt-1"
+                               for="currentNodeForModal.node.recursive">
+                            {{ t('Recursive') }}
+                        </label>
+                    </c-form-check>
+                    <div class="help-block">
+                        {{ t('Determines if the host and service status of all sub-containers will be shown.') }}
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label cLabel for="RegionManagersSelect">
+                        {{ t('Region managers') }}
+                    </label>
+                    <oitc-multi-select
+                        name="RegionManagersSelect"
+                        id="RegionManagersSelect"
+                        optionValue="key"
+                        optionLabel="value"
+                        [appendTo]="''"
+                        [(ngModel)]="selectedRegionManagers"
+                        [options]="modalRegionManagers"
+                        (onChange)="disableUsedUsersModal()"
+                        oitcFormError [errors]="errors" errorField="region_managers">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="region_managers"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ManagersSelect">
+                        {{ t('Managers') }}
+                    </label>
+                    <oitc-multi-select
+                        name="ManagersSelect"
+                        id="ManagersSelect"
+                        optionValue="key"
+                        optionLabel="value"
+                        [appendTo]="''"
+                        [(ngModel)]="selectedManagers"
+                        [options]="modalManagers"
+                        (onChange)="disableUsedUsersModal()"
+                        oitcFormError [errors]="errors" errorField="managers">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="managers"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="UsersSelect">
+                        {{ t('Users') }}
+                    </label>
+                    <oitc-multi-select
+                        name="UsersSelect"
+                        id="UsersSelect"
+                        optionValue="key"
+                        optionLabel="value"
+                        [appendTo]="''"
+                        [(ngModel)]="selectedUsers"
+                        [options]="modalUsers"
+                        (onChange)="disableUsedUsersModal()"
+                        oitcFormError [errors]="errors" errorField="users">
+                    </oitc-multi-select>
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="users"></oitc-form-feedback>
+                </div>
+            }
+
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton color="primary" class="ripple" [cModalToggle]="ocNodeEditModal.id"
+                    (click)="onUpdateNodeModal()">
+                {{ t('Update node') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
